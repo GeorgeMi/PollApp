@@ -12,6 +12,8 @@
 using Entities;
 using DataAccess.Repository.Interfaces;
 using DataAccess.Context;
+using System;
+using System.Data.SqlClient;
 
 namespace DataAccess.Repository.Implementations
 {
@@ -19,7 +21,16 @@ namespace DataAccess.Repository.Implementations
     {
         public TokenRepository(PollAppDBContext context) : base(context)
         {
-
         }
+        public void UpdateExpirationDate(string tokenString,DateTime expirationDate)
+        {
+            Token t = Context.Tokens.Find(11);
+            
+            
+           // t.TokenString = tokenString;
+            t.ExpirationDate = expirationDate;
+            Context.SaveChanges();
+        }
+
     }
 }

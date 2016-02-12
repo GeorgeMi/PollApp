@@ -77,6 +77,7 @@ namespace DataAccess.Repository.Implementations
             Context.Entry<T>(entity).State = System.Data.Entity.EntityState.Modified;
             Context.SaveChanges();
         }
+
         #endregion
     }
 }

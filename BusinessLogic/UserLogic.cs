@@ -10,15 +10,18 @@
  * 10.02.2016    Miron George       Created class.
  */
 using DataAccess;
+using DataTransferObject;
 using Entities;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace BusinessLogic
 {
     public class UserLogic
     {
         private IDataAccess _dataAccess;
+        private UserDTO userDTO = new UserDTO() { Username = "george", Password="pass" };
 
         public UserLogic(IDataAccess objDataAccess)
         {
@@ -31,15 +34,16 @@ namespace BusinessLogic
         {
             return _dataAccess.UserRepository.GetAll().ToList();
         }
-        public void AddUser(User user)
+        public void AddUser(string username, string password,string email)
         {
+            User user = new User() { Username = username, Password = password, Email = email, Role = "user" };
             _dataAccess.UserRepository.Add(user);
         }
         public User GetUser(int id)
         {
             return _dataAccess.UserRepository.FindFirstBy(user => user.UserID == id);
         }
-        public void DeleteUser(int id)
+         public void DeleteUser(int id)
         {
            User u= _dataAccess.UserRepository.FindFirstBy(user => user.UserID == id);
             _dataAccess.UserRepository.Delete(u);
@@ -48,5 +52,13 @@ namespace BusinessLogic
         {
             _dataAccess.UserRepository.Delete(u);
         }
+        public int GetID(string username)
+        {
+            return _dataAccess.UserRepository.FindFirstBy(user => user.Username == username).UserID;
+        }
+       
+
+
+      
     }
 }

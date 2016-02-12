@@ -7,10 +7,12 @@
  * 09.02.2016    Miron George       Created interface.
  */
 using Entities;
+using System;
 
 namespace DataAccess.Repository.Interfaces
 {
     public interface ITokenRepository : IGenericRepository<Token>
     {
+       void UpdateExpirationDate(string tokenString, DateTime expirationDate);
     }
 }
