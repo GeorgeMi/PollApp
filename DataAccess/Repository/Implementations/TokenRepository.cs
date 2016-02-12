@@ -22,13 +22,11 @@ namespace DataAccess.Repository.Implementations
         public TokenRepository(PollAppDBContext context) : base(context)
         {
         }
-        public void UpdateExpirationDate(string tokenString,DateTime expirationDate)
+        public void UpdateExpirationDate(int id,DateTime expirationDate)
         {
-            Token t = Context.Tokens.Find(11);
-            
-            
-           // t.TokenString = tokenString;
+            Token t = Context.Tokens.Find(id);
             t.ExpirationDate = expirationDate;
+
             Context.SaveChanges();
         }
 

@@ -40,13 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnswerLogic.cs" />
+    <Compile Include="AdminLogic.cs" />
     <Compile Include="AuthLogic.cs" />
     <Compile Include="BusinessLogic.cs" />
-    <Compile Include="CategoryLogic.cs" />
-    <Compile Include="FormLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QuestionLogic.cs" />
     <Compile Include="TokenLogic.cs" />
     <Compile Include="UserLogic.cs" />
   </ItemGroup>

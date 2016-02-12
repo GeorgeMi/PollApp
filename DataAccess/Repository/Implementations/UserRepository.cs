@@ -12,6 +12,7 @@
 using Entities;
 using DataAccess.Repository.Interfaces;
 using DataAccess.Context;
+using System;
 
 namespace DataAccess.Repository.Implementations
 {
@@ -20,6 +21,14 @@ namespace DataAccess.Repository.Implementations
         public UserRepository(PollAppDBContext context) : base(context)
         {
 
+        }
+
+        public void ChangeRole(int userID, string role)
+        {
+            User u = Context.Users.Find(userID);
+            u.Role = role;
+
+            Context.SaveChanges();
         }
     }
 }

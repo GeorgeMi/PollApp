@@ -23,8 +23,9 @@ namespace ConsoleApplicationClient
                 Console.WriteLine(DateTime.Now.AddHours(2));
             }
 
-           //string token=bl.AuthLogic.Authenticate("a","b");
-            Console.WriteLine(bl.AuthLogic.VerifyTokenDate("7A-01-17-30-F4-59-39-FA-95-0C-5D-B2-91-27-7B-98"));
+            // Console.WriteLine(bl.AuthLogic.Authenticate("geo","p"));
+            // Console.WriteLine(bl.AuthLogic.VerifyTokenDate("A7-AB-5B-E1-B4-0D-FC-F4-C2-EC-9C-19-9B-91-D8-47"));
+            bl.AdminLogic.DemoteUser(6);
         }
     }
 }

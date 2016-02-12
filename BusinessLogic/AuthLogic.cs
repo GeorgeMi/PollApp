@@ -11,6 +11,7 @@
  */
 using DataAccess;
 using DataTransferObject;
+using Entities;
 using System;
 
 namespace BusinessLogic
@@ -19,7 +20,6 @@ namespace BusinessLogic
     {
         private IDataAccess _dataAccess;
         private TokenLogic TokenLogic;
-        private UserLogic UserLogic;
         private UserDTO userDTO = new UserDTO() { Username = "george", Password = "pass" };
 
         public AuthLogic(IDataAccess objDataAccess)
@@ -29,7 +29,7 @@ namespace BusinessLogic
 
             _dataAccess = objDataAccess;
             TokenLogic = new TokenLogic(_dataAccess);
-            UserLogic = new UserLogic(_dataAccess);
+           
         }
         private int Validate(string username, string password)
         {
@@ -66,12 +66,16 @@ namespace BusinessLogic
             //verifica disponibilitatea numelui si introduce un nou user in baza de date
             try
             {
-                UserLogic.AddUser(username, password, email);
+                //incearca sa adauga un nou user
+                User user = new User() { Username = username, Password = password, Email = email, Role = "user" };
+                _dataAccess.UserRepository.Add(user);
             }
             catch
             {
+                //numele exista deja in baza de date
                 return "Name already exists";
             }
+
             int userID = Validate(username, password);
             if (userID == -1)
             {
@@ -87,17 +91,27 @@ namespace BusinessLogic
         {
             //verifica tokenul din baza de date. Daca nu exista sau este expirat->eroare. 
             //Altfel se updateaza data de expirare si se intoarce ok
-            DateTime expirationDate = TokenLogic.GetTokenExpirationDate(tokenString);
-
-            if (expirationDate.CompareTo(DateTime.Now) != 1)
+            try
             {
+                DateTime expirationDate = TokenLogic.GetTokenExpirationDate(tokenString);
+                if (expirationDate.CompareTo(DateTime.Now) != 1)
+                {
+                    //token-ul este expirat
+                    return false;
+                }
+                else
+                {
+                    TokenLogic.UpdateTokenExpirationDate(tokenString);
+                    return true;
+                }
+            }
+            catch
+            {
+                //token-ul nu exista in baza de date
                 return false;
             }
-            else
-            {
-                TokenLogic.UpdateTokenExpirationDate(tokenString);
-                return true;
-            }
+
+           
         }
     }
 }

@@ -39,6 +39,10 @@ namespace BusinessLogic
         {
             return _dataAccess.TokenRepository.FindFirstBy(token => token.TokenID == id);
         }
+        public int GetTokenID(string tokenString)
+        {
+            return _dataAccess.TokenRepository.FindFirstBy(token => token.TokenString == tokenString).TokenID;
+        }
         public Token GetTokenByUserID(int id)
         {
             return _dataAccess.TokenRepository.FindFirstBy(token => token.UserID == id);
@@ -91,7 +95,8 @@ namespace BusinessLogic
 
         public void UpdateTokenExpirationDate(string tokenString)
         {
-            _dataAccess.TokenRepository.UpdateExpirationDate(tokenString, DateTime.Now.AddHours(3));
+            int id = GetTokenID(tokenString);
+            _dataAccess.TokenRepository.UpdateExpirationDate(id, DateTime.Now.AddHours(3));
         }
        
     }

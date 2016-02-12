@@ -30,35 +30,35 @@ namespace BusinessLogic
 
             _dataAccess = objDataAccess;
         }
-        public List<User> GetAll()
+        public List<Form> GetAllForms(int id)
         {
-            return _dataAccess.UserRepository.GetAll().ToList();
+            return _dataAccess.FormRepository.FindAllBy(form => form.FormID == id).ToList();
         }
-        public void AddUser(string username, string password,string email)
+        public void AddForm(Form form)
         {
-            User user = new User() { Username = username, Password = password, Email = email, Role = "user" };
-            _dataAccess.UserRepository.Add(user);
+            _dataAccess.FormRepository.Add(form);
         }
-        public User GetUser(int id)
+        public Form GetForm(int id)
         {
-            return _dataAccess.UserRepository.FindFirstBy(user => user.UserID == id);
+            return _dataAccess.FormRepository.FindFirstBy(form => form.FormID == id);
         }
-         public void DeleteUser(int id)
+        public void DeleteForm(int id)
         {
-           User u= _dataAccess.UserRepository.FindFirstBy(user => user.UserID == id);
-            _dataAccess.UserRepository.Delete(u);
+            Form f = _dataAccess.FormRepository.FindFirstBy(user => user.UserID == id);
+            _dataAccess.FormRepository.Delete(f);
         }
-        public void DeleteUser(User u)
+        public void DeleteForm(Form f)
         {
-            _dataAccess.UserRepository.Delete(u);
+            _dataAccess.FormRepository.Delete(f);
         }
-        public int GetID(string username)
+        public int GetFormID(string title)
         {
-            return _dataAccess.UserRepository.FindFirstBy(user => user.Username == username).UserID;
+            return _dataAccess.FormRepository.FindFirstBy(form => form.Title == title).UserID;
         }
-       
 
 
-      
+
+
+
     }
 }
