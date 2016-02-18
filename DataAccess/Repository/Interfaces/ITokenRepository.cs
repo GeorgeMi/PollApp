@@ -13,6 +13,7 @@ namespace DataAccess.Repository.Interfaces
 {
     public interface ITokenRepository : IGenericRepository<Token>
     {
-       void UpdateExpirationDate(int id, DateTime expirationDate);
+        void UpdateExpirationDate(int id, DateTime expirationDate);
+        void UpdateToken(int id, DateTime createdDate, DateTime expirationDate, string tokenString);
     }
 }

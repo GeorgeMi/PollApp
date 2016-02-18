@@ -29,6 +29,17 @@ namespace DataAccess.Repository.Implementations
 
             Context.SaveChanges();
         }
+        public void UpdateToken(int id, DateTime createdDate, DateTime expirationDate, string tokenString)
+        {
+            Token t = Context.Tokens.Find(id);
+
+            t.CreatedDate = createdDate;
+            t.ExpirationDate = expirationDate;
+            t.TokenString = tokenString;
+            
+            Context.SaveChanges();
+        }
+
 
     }
 }

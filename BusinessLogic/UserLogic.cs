@@ -21,7 +21,7 @@ namespace BusinessLogic
     public class UserLogic
     {
         private IDataAccess _dataAccess;
-        private UserDTO userDTO = new UserDTO() { Username = "george", Password="pass" };
+        private UserDTO userDTO = new UserDTO() { Username = "george", Password = "pass" };
 
         public UserLogic(IDataAccess objDataAccess)
         {
@@ -32,27 +32,33 @@ namespace BusinessLogic
         }
         public List<Form> GetAllForms(int id)
         {
-            return _dataAccess.FormRepository.FindAllBy(form => form.FormID == id).ToList();
+            //returneaza toate formurile unui user
+            return _dataAccess.FormRepository.FindAllBy(form => form.UserID == id).ToList();
         }
         public void AddForm(Form form)
         {
+            //adauga un form
             _dataAccess.FormRepository.Add(form);
         }
         public Form GetForm(int id)
         {
+            //returneaza form dupa id
             return _dataAccess.FormRepository.FindFirstBy(form => form.FormID == id);
         }
         public void DeleteForm(int id)
         {
-            Form f = _dataAccess.FormRepository.FindFirstBy(user => user.UserID == id);
+            //sterge un form dupa id
+            Form f = _dataAccess.FormRepository.FindFirstBy(form => form.FormID == id);
             _dataAccess.FormRepository.Delete(f);
         }
         public void DeleteForm(Form f)
         {
+            //sterge form
             _dataAccess.FormRepository.Delete(f);
         }
         public int GetFormID(string title)
         {
+            //returneaza id-ul unui form
             return _dataAccess.FormRepository.FindFirstBy(form => form.Title == title).UserID;
         }
 

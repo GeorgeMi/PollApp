@@ -4,7 +4,7 @@
  * Written by Miron George <george.miron2003@gmail.com>, 2016
  *
  * Role:
- *  logic. 
+ *  Authentication logic. 
  *
  * History:
  * 12.02.2016    Miron George       Created class and implemented methods.

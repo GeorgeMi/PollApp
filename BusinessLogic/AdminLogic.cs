@@ -1,17 +1,26 @@
-﻿using DataAccess;
+﻿/* Copyright (C) Miron George - All Rights Reserved
+* Unauthorized copying of this file, via any medium is strictly prohibited
+* Proprietary and confidential
+* Written by Miron George <george.miron2003@gmail.com>, 2016
+* 
+* Role:
+*   Admin logic. 
+*
+* History:
+* 12.02.2016    Miron George       Created class.
+*/
+
+using DataAccess;
 using Entities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessLogic
 {
-    public class AdminLogic:UserLogic
+    public class AdminLogic : UserLogic
     {
         private IDataAccess _dataAccess;
-        public AdminLogic(IDataAccess objDataAccess):base(objDataAccess)
+        public AdminLogic(IDataAccess objDataAccess) : base(objDataAccess)
         {
             //primesc obiectul, nu e treaba UserLogic ce dataAccess se foloseste
             //unity are grija de dependency injection

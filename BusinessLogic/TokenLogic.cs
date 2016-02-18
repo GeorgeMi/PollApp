@@ -4,7 +4,7 @@
  * Written by Miron George <george.miron2003@gmail.com>, 2016
  *
  * Role:
- *  logic. 
+ *  Token logic. 
  *
  * History:
  * 10.02.2016    Miron George       Created class.
@@ -51,42 +51,75 @@ namespace BusinessLogic
         public string UpdateToken(int id, string username)
         {
             Token t;
+            DateTime expirationDate;
+            DateTime createdDate;
+            string text;
+            MD5 md5;
+            byte[] textToHash;
+            byte[] result;
+
             try
             {
-                //daca exista un token pentru user preiau datele si apoi le sterg
-               t = GetTokenByUserID(id);
-               _dataAccess.TokenRepository.Delete(t);
+                //daca exista un token pentru user preiau obiectul
+                t = GetTokenByUserID(id);
+                
+                createdDate = DateTime.Now;
+                expirationDate = DateTime.Now.AddHours(3);
+
+                //creez token string
+                text = t.TokenID.ToString() + username + createdDate.ToString();
+
+                md5 = new MD5CryptoServiceProvider();
+                textToHash = Encoding.Default.GetBytes(text);
+                result = md5.ComputeHash(textToHash);
+
+                //Convert result back to string.
+                text = BitConverter.ToString(result);
+
+                try
+                {
+                    //verificare update
+                    _dataAccess.TokenRepository.UpdateToken(t.TokenID, createdDate,expirationDate,text);
+                }
+                catch (Exception ex)
+                {
+                    return ex.InnerException.InnerException.Message;
+                }
+                return text;
+               
             }
             catch
             {
                 t = new Token();
                 t.UserID = id;
-            }
-            
-            t.CreatedDate = DateTime.Now;
-            t.ExpirationDate = t.CreatedDate.AddHours(3);
-           
-            //creez token string
-            string text = id.ToString() + username + t.CreatedDate.ToString();
-                             
-            MD5 md5 = new MD5CryptoServiceProvider();
-            byte[] textToHash = Encoding.Default.GetBytes(text);
-            byte[] result = md5.ComputeHash(textToHash);
 
-            //Convert result back to string.
-            t.TokenString = BitConverter.ToString(result);
-            
-            try
-            { 
-                //verificare inserare
-                _dataAccess.TokenRepository.Add(t);
-            }
-            catch(Exception ex)
-            {
-                return ex.InnerException.InnerException.Message;
+                t.CreatedDate = DateTime.Now;
+                t.ExpirationDate = t.CreatedDate.AddHours(3);
+
+                //creez token string
+                text = t.TokenID.ToString() + username + t.CreatedDate.ToString();
+
+                md5 = new MD5CryptoServiceProvider();
+                textToHash = Encoding.Default.GetBytes(text);
+                result = md5.ComputeHash(textToHash);
+
+                //Convert result back to string.
+                t.TokenString = BitConverter.ToString(result);
+
+                try
+                {
+                    //verificare inserare
+                    _dataAccess.TokenRepository.Add(t);
+                }
+                catch (Exception ex)
+                {
+                    return ex.InnerException.InnerException.Message;
+                }
+
+                return t.TokenString;
             }
 
-            return t.TokenString;
+
         }
         public DateTime GetTokenExpirationDate(string tokenString)
         {
@@ -98,6 +131,6 @@ namespace BusinessLogic
             int id = GetTokenID(tokenString);
             _dataAccess.TokenRepository.UpdateExpirationDate(id, DateTime.Now.AddHours(3));
         }
-       
+
     }
 }
