@@ -21,8 +21,7 @@ namespace BusinessLogic
     public class UserLogic
     {
         private IDataAccess _dataAccess;
-        private UserDTO userDTO = new UserDTO() { Username = "george", Password = "pass" };
-
+       
         public UserLogic(IDataAccess objDataAccess)
         {
             //primesc obiectul, nu e treaba UserLogic ce dataAccess se foloseste
@@ -61,6 +60,8 @@ namespace BusinessLogic
             //returneaza id-ul unui form
             return _dataAccess.FormRepository.FindFirstBy(form => form.Title == title).UserID;
         }
+
+       
 
 
 

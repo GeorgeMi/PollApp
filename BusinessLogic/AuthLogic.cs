@@ -110,8 +110,31 @@ namespace BusinessLogic
                 //token-ul nu exista in baza de date
                 return false;
             }
+        }
 
-           
+        public bool VerifyAdminToken(string tokenString)
+        {
+            //verifica daca userul cu tokenul tokenString este sau  nu admin
+            try
+            {
+                string role = TokenLogic.GetRoleByToken(tokenString);
+
+                if (role == "admin")
+                {
+                   //userul este admin
+                    return true;
+                }
+                else
+                {
+                    //userul nu este admin
+                    return false;
+                }
+            }
+            catch
+            {
+                //userul nu exista
+                return false;
+            }
         }
     }
 }

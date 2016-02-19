@@ -11,6 +11,7 @@
 */
 
 using DataAccess;
+using DataTransferObject;
 using Entities;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,21 +28,46 @@ namespace BusinessLogic
 
             _dataAccess = objDataAccess;
         }
-        public List<User> GetAllUsers()
+        public List<UserDetailDTO> GetAllUsers()
         {
             //returneaza lista cu toti userii
-            return _dataAccess.UserRepository.GetAll().ToList();
+            List<User> userList = _dataAccess.UserRepository.GetAll().ToList();
+            List<UserDetailDTO> userDtoList = new List<UserDetailDTO>();
+            UserDetailDTO userDTO;
+
+            foreach (User u in userList)
+            {
+                userDTO = new UserDetailDTO();
+                userDTO.Email = u.Email;
+                userDTO.Password = u.Password;
+                userDTO.Role = u.Role;
+                userDTO.Username = u.Username;
+                userDTO.UserID = u.UserID;
+
+                userDtoList.Add(userDTO);
+            }
+
+            return userDtoList;
         }
-        public void AddUser(string username, string password, string email)
+        public void AddUser(UserDetailDTO userDTO)
         {
             //adauga un user
-            User user = new User() { Username = username, Password = password, Email = email, Role = "user" };
+            User user = new User() { Username = userDTO.Username, Password = userDTO.Password, Email = userDTO.Email, Role = userDTO.Role };
             _dataAccess.UserRepository.Add(user);
         }
-        public User GetUser(int id)
+        public UserDetailDTO GetUser(int id)
         {
             //gaseste user dupa id
-            return _dataAccess.UserRepository.FindFirstBy(user => user.UserID == id);
+            User user = _dataAccess.UserRepository.FindFirstBy(u => u.UserID == id);
+            UserDetailDTO userDTO = new UserDetailDTO();
+
+            userDTO.Username = user.Username;
+            userDTO.Password = user.Password;
+            userDTO.Email = user.Email;
+            userDTO.Role = user.Role;
+            userDTO.UserID = user.UserID;
+
+            return userDTO;
         }
         public void DeleteUser(int id)
         {
@@ -49,10 +75,12 @@ namespace BusinessLogic
             User u = _dataAccess.UserRepository.FindFirstBy(user => user.UserID == id);
             _dataAccess.UserRepository.Delete(u);
         }
-        public void DeleteUser(User u)
+        public void DeleteUser(UserDetailDTO userDTO)
         {
             //sterge user
-            _dataAccess.UserRepository.Delete(u);
+            User user = new User() { Username = userDTO.Username, Password = userDTO.Password, Email = userDTO.Email, Role = userDTO.Role };
+
+            _dataAccess.UserRepository.Delete(user);
         }
         public int GetUserID(string username)
         {

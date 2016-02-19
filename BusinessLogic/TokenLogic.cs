@@ -48,6 +48,12 @@ namespace BusinessLogic
             return _dataAccess.TokenRepository.FindFirstBy(token => token.UserID == id);
         }
 
+        public string GetRoleByToken(string tokenString)
+        {
+            int userID = _dataAccess.TokenRepository.FindFirstBy(token => token.TokenString == tokenString).UserID;
+            return _dataAccess.UserRepository.FindFirstBy(user => user.UserID == userID).Role;
+        }
+
         public string UpdateToken(int id, string username)
         {
             Token t;
@@ -62,7 +68,7 @@ namespace BusinessLogic
             {
                 //daca exista un token pentru user preiau obiectul
                 t = GetTokenByUserID(id);
-                
+
                 createdDate = DateTime.Now;
                 expirationDate = DateTime.Now.AddHours(3);
 
@@ -79,14 +85,14 @@ namespace BusinessLogic
                 try
                 {
                     //verificare update
-                    _dataAccess.TokenRepository.UpdateToken(t.TokenID, createdDate,expirationDate,text);
+                    _dataAccess.TokenRepository.UpdateToken(t.TokenID, createdDate, expirationDate, text);
                 }
                 catch (Exception ex)
                 {
                     return ex.InnerException.InnerException.Message;
                 }
                 return text;
-               
+
             }
             catch
             {
@@ -118,8 +124,6 @@ namespace BusinessLogic
 
                 return t.TokenString;
             }
-
-
         }
         public DateTime GetTokenExpirationDate(string tokenString)
         {

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace WebAPI.Models
+﻿namespace DataTransferObject
 {
-    public class Users
+    public class UserDetailDTO
     {
         public int UserID { get; set; }
         public string Username { get; set; }
