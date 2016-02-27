@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Poll App</title>
+
+    <!-- Style sheets -->
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+    <link href="Content/sidebar.css" rel="stylesheet" />
+
+</head>
+<body ng-app="userManagement" ng-controller="MainCtrl as vm" data-ng-init="vm.registerToken()">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-brand">Poll Application</div>
+            <div class="nav navbar-nav navbar-right">
+                <form ng-hide="vm.isLoggedIn" class="navbar-form navbar-right">
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Username" ng-model="vm.userData.username" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Password" ng-model="vm.userData.password" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-default" ng-click="vm.login()">Login</button>
+
+                    <div ng-show="vm.message">{{vm.message}}</div>
+                </form>
+                <ul class="nav navbar-nav" ng-if="vm.isLoggedIn">
+
+                    <li><p class="navbar-text">Hello, {{vm.userData.username}}</p></li>
+                    <li><p class="navbar-text" ng-click="vm.logout()">Logout</p></li>
+
+                </ul>
+            </div>
+        </div>
+
+    </nav>
+
+    <!-- Container -->
+    <div class="container">
+        <form class="form-horizontal" role="form" ng-hide="vm.isLoggedIn">
+            <center><h2>Register</h2></center>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="username">Username:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="username" placeholder="Enter username" ng-model="vm.userDataRegistration.username" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="email">Email:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" id="email" placeholder="Enter email" title="Must be in the following order: characters@characters.domain" ng-model="vm.userDataRegistration.email" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="pwd">Password:</label>
+                <div class="col-sm-10">
+                    <input type="password" name="pw" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" class="form-control" id="password" placeholder="Enter password" ng-model="vm.userDataRegistration.password" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="pwd">Confirm password:</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" id="password" placeholder="Re-enter password" ng-model="vm.confirm_password" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-default" ng-click="vm.registerUser()">Register</button>
+                </div>
+            </div>
+
+
+
+
+        </form>
+        <div ng-show="vm.message">{{vm.message}}</div>
+
+    </div>
+
+    <!-- Wrapper -->
+    <div ng-if="vm.isLoggedIn" id="wrapper">
+        <!-- sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li ng-click="vm.changePage('home')"><a href="#">Home</a></li>
+                <li ng-click="vm.changePage('my_polls')"><a href="#my_polls">My polls</a></li>
+                <li ng-click="vm.changePage('categories')"><a href="#categories">Categories</a></li>
+                <li ng-click="vm.changePage('new_poll')"><a href="#new_poll">Add new poll</a></li>
+            </ul>
+
+            <ul ng-if="vm.role == 'admin'" class="sidebar-nav">
+                <li><hr></li>
+                <li><h4>Admin</h4></li>
+                <li ng-click="vm.changePage('manage_categories')"><a href="#manage_categories">Manage Categories</a></li>
+                <li ng-click="vm.changePage('manage_users')"><a href="#manage_users">Manage Users</a></li>
+                <li ng-click="vm.changePage('manage_polls')"><a href="#manage_polls">Manage Polls</a></li>
+
+            </ul>
+        </div>
+
+        <!-- page content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div ng-if="vm.isLoggedIn" class="col-lg-12">
+                        <div ng-if="vm.pages.home">home</div>
+                        <div ng-if="vm.pages.categories">categories</div>
+                        <div ng-if="vm.pages.my_polls">my_polls</div>
+                        <div ng-if="vm.pages.new_poll" ng-include="'app/form/formAddView.html'">new_poll</div>
+                        <div ng-if="vm.pages.manage_users" ng-include="'app/user/userListView.html'"></div>
+                        <div ng-if="vm.pages.manage_polls">manage_polls</div>
+                        <div ng-if="vm.pages.manage_categories">manage_categories</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Library Scripts -->
+    <script src="scripts/angular.js"></script>
+    <script src="Scripts/angular-resource.js"></script>
+    <script src="Scripts/angular-cookies.js"></script>
+
+    <!-- Application Script -->
+    <script src="app/app.js"></script>
+
+    <!-- Services -->
+    <script src="common/common.services.js"></script>
+    <script src="common/userResource.js"></script>
+    <script src="common/userAccount.js"></script>
+
+    <!-- Product Controllers -->
+    <script src="app/user/userListCtrl.js"></script>
+    <script src="app/mainCtrl.js"></script>
+</body>
+
+</html>

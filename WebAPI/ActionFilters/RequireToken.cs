@@ -9,7 +9,6 @@ namespace WebAPI.ActionFilters
 {
     public class RequireToken : ActionFilterAttribute
     {
-        private BusinessLogic.BusinessLogic bl;
         /// <summary>
         /// Public default Constructor
         /// </summary>

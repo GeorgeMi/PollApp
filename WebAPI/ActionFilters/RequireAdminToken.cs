@@ -12,8 +12,7 @@ namespace WebAPI.ActionFilters
 {
     public class RequireAdminToken : ActionFilterAttribute
     {
-        private BusinessLogic.BusinessLogic bl;
-        /// <summary>
+         /// <summary>
         /// Public default Constructor
         /// </summary>
         public override void OnActionExecuting(HttpActionContext context)

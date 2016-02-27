@@ -10,7 +10,6 @@
  * 12.02.2016    Miron George       Created class and implemented methods.
  */
 using DataAccess;
-using DataTransferObject;
 using Entities;
 using System;
 
@@ -20,8 +19,7 @@ namespace BusinessLogic
     {
         private IDataAccess _dataAccess;
         private TokenLogic TokenLogic;
-        private UserDTO userDTO = new UserDTO() { Username = "george", Password = "pass" };
-
+       
         public AuthLogic(IDataAccess objDataAccess)
         {
             //primesc obiectul, nu e treaba UserLogic ce dataAccess se foloseste
@@ -51,7 +49,7 @@ namespace BusinessLogic
 
             if (userID == -1)
             {
-                return "Invalid username or password";
+                return null;
             }
             else
             {
