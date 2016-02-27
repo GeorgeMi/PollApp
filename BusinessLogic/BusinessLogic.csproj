@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="AuthLogic.cs" />
     <Compile Include="BusinessLogic.cs" />
+    <Compile Include="CategoryLogic.cs" />
     <Compile Include="FormLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TokenLogic.cs" />

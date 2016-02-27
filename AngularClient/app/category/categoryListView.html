@@ -1,0 +1,29 @@
+﻿<input type="text" ng-model="searchText" class="form-control" placeholder="Search">
+
+<div class="panel panel-primary" ng-controller="CategoryListCtrl as vm">
+
+
+    <div class="panel-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>Name</td>
+                   
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="category in vm.categories  | filter:searchText">
+                    <td>{{ category.CategoryID}}</td>
+                    <td>{{ category.Name }}</td>
+                    <td>
+                        <div class="btn-group" role="group" aria-label="...">
+                             <button class="btn btn-default" ng-click="">Delete</button>
+                        </div>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

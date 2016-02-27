@@ -93,7 +93,7 @@
 
         //-----------------login with username and password-----------------------
         vm.login = function () {
-            
+
             userAccount.login.loginUser(vm.userData,
                 function (data) {
                     if (data.error) {
@@ -121,7 +121,7 @@
 
         //------------------login with token-----------------------
         vm.registerToken = function () {
-         
+
             userAccount.tokenRegistration.registerToken(
                 function (data) {
 
@@ -229,22 +229,27 @@
         //delete question
         vm.deleteQuestion = function (questionID) {
 
-            vm.sendForm.questions.splice(questionID - 1, 1);
-            var count = 1;
-            var i;
+            if (vm.sendForm.questions.length > 1) {
+                vm.sendForm.questions.splice(questionID - 1, 1);
+                var count = 1;
+                var i;
 
-            //rewrite id foreach element in array
-            for (i = 0; i <= vm.sendForm.questions.length; i++) {
-                if (vm.sendForm.questions[i] !== undefined) {
-                    vm.sendForm.questions[i].id = count;
-                    count++;
+                //rewrite id foreach element in array
+                for (i = 0; i <= vm.sendForm.questions.length; i++) {
+                    if (vm.sendForm.questions[i] !== undefined) {
+                        vm.sendForm.questions[i].id = count;
+                        count++;
+                    }
                 }
+            } else {
+                alert("Minimum Number of Questions Allowed is 1");
             }
         }
 
         //delete answer
         vm.deleteAnswer = function (questionID, answerID) {
             // alert('q: ' + questionID + ', a: ' + answerID);
+            if (vm.sendForm.questions[questionID - 1].answers.length > 1) {
             vm.sendForm.questions[questionID - 1].answers.splice(answerID - 1, 1);
             var count = 1;
             var i;
@@ -257,6 +262,9 @@
                 }
 
             }
+        } else {
+            alert("Minimum Number of Answers Allowed is 1");
+        }
         }
 
     };

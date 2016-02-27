@@ -102,6 +102,7 @@ namespace BusinessLogic
             return answerDTOList;
         }
 
+
         public string GetCategory(int id)
         {
             //

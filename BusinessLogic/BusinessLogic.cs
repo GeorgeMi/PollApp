@@ -19,6 +19,7 @@ namespace BusinessLogic
         public TokenLogic TokenLogic;
         public UserLogic UserLogic;
         public AuthLogic AuthLogic;
+        public CategoryLogic CategoryLogic;
 
         public BusinessLogic(IDataAccess _dataAccess)
         {
@@ -26,7 +27,8 @@ namespace BusinessLogic
             TokenLogic = new TokenLogic(_dataAccess);
             UserLogic = new UserLogic(_dataAccess);
             AuthLogic = new AuthLogic(_dataAccess);
-        }
+            CategoryLogic = new CategoryLogic(_dataAccess);
+    }
 
 
 
