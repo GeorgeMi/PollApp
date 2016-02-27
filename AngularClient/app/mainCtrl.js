@@ -1,7 +1,7 @@
 ﻿(function () {
     "use strinct";
     angular
-        .module("userManagement")
+        .module("app")
         .controller("MainCtrl", ["userAccount", "$cookies", MainCtrl]);
 
     function MainCtrl(userAccount, $cookies) {
@@ -38,7 +38,7 @@
 
         vm.tokenDataRegistration = $cookies.get('token');
 
-        //form to send
+        //data form to send
         vm.sendForm = {
             username: '',
             title: '',
@@ -48,10 +48,17 @@
             state: '',
             questions: [{ id: 1, question: '', answers: [{ id: 1, answer: '' }] }]
         };
+
         vm.sendFormMessage = '';
         //max val 
         vm.maxQuestionCount = 20;
         vm.maxAnswerCount = 6;
+
+        //data for categories
+        vm.category = {
+            id: '',
+            name: ''
+        };
 
         //------------------register-----------------------
         vm.registerUser = function () {
@@ -250,21 +257,33 @@
         vm.deleteAnswer = function (questionID, answerID) {
             // alert('q: ' + questionID + ', a: ' + answerID);
             if (vm.sendForm.questions[questionID - 1].answers.length > 1) {
-            vm.sendForm.questions[questionID - 1].answers.splice(answerID - 1, 1);
-            var count = 1;
-            var i;
+                vm.sendForm.questions[questionID - 1].answers.splice(answerID - 1, 1);
+                var count = 1;
+                var i;
 
-            //rewrite id foreach element in array
-            for (i = 0; i <= vm.sendForm.questions[questionID - 1].answers.length; i++) {
-                if (vm.sendForm.questions[questionID - 1].answers[i] !== undefined) {
-                    vm.sendForm.questions[questionID - 1].answers[i].id = count;
-                    count++;
+                //rewrite id foreach element in array
+                for (i = 0; i <= vm.sendForm.questions[questionID - 1].answers.length; i++) {
+                    if (vm.sendForm.questions[questionID - 1].answers[i] !== undefined) {
+                        vm.sendForm.questions[questionID - 1].answers[i].id = count;
+                        count++;
+                    }
+
                 }
-
+            } else {
+                alert("Minimum Number of Answers Allowed is 1");
             }
-        } else {
-            alert("Minimum Number of Answers Allowed is 1");
         }
+
+        vm.getCategories = function () {
+            categoryResource.get.getCategory(vm.category,
+
+                   function (data) {
+
+                   },
+
+                   function (response) {
+
+                   });
         }
 
     };

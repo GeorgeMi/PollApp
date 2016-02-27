@@ -9,7 +9,7 @@
     <link href="Content/sidebar.css" rel="stylesheet" />
 
 </head>
-<body ng-app="userManagement" ng-controller="MainCtrl as vm" data-ng-init="vm.registerToken()">
+<body ng-app="app" ng-controller="MainCtrl as vm" data-ng-init="vm.registerToken()">
 
     <!-- Navbar -->
     <nav class="navbar navbar-default">
@@ -117,7 +117,7 @@
                         <div ng-if="vm.pages.new_poll" ng-include="'app/form/formAddView.html'">new_poll</div>
                         <div ng-if="vm.pages.manage_users" ng-include="'app/user/userListView.html'"></div>
                         <div ng-if="vm.pages.manage_polls">manage_polls</div>
-                        <div ng-if="vm.pages.manage_categories" ng-include="'app/category/categoryAddView.html'">manage_categories</div>
+                        <div ng-if="vm.pages.manage_categories" ng-include="'app/category/categoryListView.html'">manage_categories</div>
                     </div>
                 </div>
             </div>
@@ -136,10 +136,12 @@
     <script src="common/common.services.js"></script>
     <script src="common/userResource.js"></script>
     <script src="common/userAccount.js"></script>
+    <script src="common/categoryResource.js"></script>
 
     <!-- Product Controllers -->
     <script src="app/user/userListCtrl.js"></script>
     <script src="app/mainCtrl.js"></script>
+    <script src="app/category/categoryListCtrl.js"></script>
 </body>
 
 </html>
