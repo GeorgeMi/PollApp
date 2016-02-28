@@ -35,5 +35,17 @@ namespace BusinessLogic
             }
             return listCategoryDTO;
         }
+        public void AddCategory(CategoryDTO categoryDTO)
+        {
+            Category category = new Category { Name = categoryDTO.Name };
+
+            _dataAccess.CategoryRepository.Add(category);
+        }
+
+        public void DeleteCategory(int categoryID)
+        {
+            Category category = _dataAccess.CategoryRepository.FindFirstBy(cat => cat.CategoryID == categoryID);
+            _dataAccess.CategoryRepository.Delete(category);
+        }
     }
 }

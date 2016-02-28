@@ -1,37 +1,48 @@
-<input type="text" ng-model="searchText" class="form-control" placeholder="Search">
+<div ng-controller="UserController as vm">
+    <div class="panel panel-default">
+        <div class="panel-heading">Search user</div>
+        <div class="panel-body">
+            <label class="control-label col-sm-2">Search:</label>
+            <div class="col-sm-8">
+                <input type="text" ng-model="searchText" class="form-control" placeholder="Search">
+            </div>
 
-<div class="panel panel-primary" ng-controller="UserListCtrl as vm">
+        </div>
+    </div>
 
+    <div class="panel panel-default">
+        <div class="panel-heading">All users</div>
+        <div class="panel-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>Username</td>
+                        <td>Password</td>
+                        <td>Email</td>
+                        <td>Role</td>
+                        <td>Actions</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="user in vm.users  | filter:searchText">
+                        <td>{{ user.UserID}}</td>
+                        <td>{{ user.Username }}</td>
+                        <td>{{ user.Password }}</td>
+                        <td>{{ user.Email }}</td>
+                        <td>{{ user.Role }}</td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="...">
+                                <button ng-if="user.Role =='admin'" class="btn btn-default" ng-click="vm.demote(user.UserID)">Demote&nbsp;</button>
+                                <button ng-if="user.Role =='user'" class="btn btn-default" ng-click="vm.promote(user.UserID)">Promote</button>
+                                <button class="btn btn-default" ng-click="vm.delete(user.UserID)">Delete</button>
+                            </div>
 
-    <div class="panel-body">
-        <table class="table">
-            <thead>
-                <tr>
-                    <td>ID</td>
-                    <td>Username</td>
-                    <td>Password</td>
-                    <td>Email</td>
-                    <td>Role</td>
-                    <td>Actions</td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="user in vm.users  | filter:searchText">
-                    <td>{{ user.UserID}}</td>
-                    <td>{{ user.Username }}</td>
-                    <td>{{ user.Password }}</td>
-                    <td>{{ user.Email }}</td>
-                    <td>{{ user.Role }}</td>
-                    <td>
-                        <div class="btn-group" role="group" aria-label="...">
-                            <button ng-if="user.Role =='admin'" class="btn btn-default" ng-click="vm.demote(user.UserID)">Demote&nbsp;</button>
-                            <button ng-if="user.Role =='user'" class="btn btn-default" ng-click="vm.promote(user.UserID)">Promote</button>
-                            <button class="btn btn-default" ng-click="vm.delete(user.UserID)">Delete</button>
-                        </div>
-
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+

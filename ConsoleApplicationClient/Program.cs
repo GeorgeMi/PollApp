@@ -23,7 +23,7 @@ namespace ConsoleApplicationClient
                 Console.WriteLine(DateTime.Now.AddHours(2));
             }
 
-            bl.FormLogic.AddCategory("history");
+            bl.FormLogic.AddCategory("politics");
           
 
       //      Form form = new Form() { CreatedDate = DateTime.Now, Deadline = DateTime.Now, State = "state", Title = "title",CategoryID=1 ,UserID=6};

@@ -9,7 +9,7 @@
     <link href="Content/sidebar.css" rel="stylesheet" />
 
 </head>
-<body ng-app="app" ng-controller="MainCtrl as vm" data-ng-init="vm.registerToken()">
+<body ng-app="app" ng-controller="MainController as vm" data-ng-init="vm.registerToken()">
 
     <!-- Navbar -->
     <nav class="navbar navbar-default">
@@ -112,12 +112,12 @@
                 <div class="row">
                     <div ng-if="vm.isLoggedIn" class="col-lg-12">
                         <div ng-if="vm.pages.home">home</div>
-                        <div ng-if="vm.pages.categories">categories</div>
+                        <div ng-if="vm.pages.categories" ng-include="'app/category/categoryUserListView.html'">categories</div>
                         <div ng-if="vm.pages.my_polls">my_polls</div>
                         <div ng-if="vm.pages.new_poll" ng-include="'app/form/formAddView.html'">new_poll</div>
                         <div ng-if="vm.pages.manage_users" ng-include="'app/user/userListView.html'"></div>
                         <div ng-if="vm.pages.manage_polls">manage_polls</div>
-                        <div ng-if="vm.pages.manage_categories" ng-include="'app/category/categoryListView.html'">manage_categories</div>
+                        <div ng-if="vm.pages.manage_categories" ng-include="'app/category/categoryAdminListView.html'">manage_categories</div>
                     </div>
                 </div>
             </div>
@@ -137,11 +137,13 @@
     <script src="common/userResource.js"></script>
     <script src="common/userAccount.js"></script>
     <script src="common/categoryResource.js"></script>
+    <script src="common/formResource.js"></script>
 
     <!-- Product Controllers -->
-    <script src="app/user/userListCtrl.js"></script>
-    <script src="app/mainCtrl.js"></script>
-    <script src="app/category/categoryListCtrl.js"></script>
+    <script src="app/mainController.js"></script>
+    <script src="app/user/userController.js"></script>
+    <script src="app/category/categoryController.js"></script>
+    <script src="app/form/formController.js"></script>
 </body>
 
 </html>

@@ -4,7 +4,7 @@
  * Written by Miron George <george.miron2003@gmail.com>, 2016
  *
  * Role:
- *  Form Model.
+ *  Category Model.
  *
  * History:
  * 25.02.2016    Miron George       Created class and implemented methods.
@@ -38,6 +38,33 @@ namespace WebAPI.Models
             catch
             {
                 return null;
+            }
+        }
+        public bool AddCategory(CategoryDTO categoryDTO)
+        {
+            try
+            {
+                bl.CategoryLogic.AddCategory(categoryDTO);
+                return true;
+
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool DeleteCategory(int categoryID)
+        {
+            try
+            {
+                bl.CategoryLogic.DeleteCategory(categoryID);
+                return true;
+
+            }
+            catch
+            {
+                return false;
             }
         }
 

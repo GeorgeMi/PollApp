@@ -1,6 +1,6 @@
 ﻿<input type="text" ng-model="searchText" class="form-control" placeholder="Search">
 
-<div class="panel panel-primary" ng-controller="FormListCtrl as vm">
+<div class="panel panel-primary" ng-controller="FormController as ctrl">
 
 
     <div class="panel-body">
@@ -16,7 +16,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="form in vm.forms  | filter:searchText">
+                <tr ng-repeat="form in ctrl.forms  | filter:searchText">
                     <td>{{ form.User}}</td>
                     <td>{{ form.Title}}</td>
                     <td>{{ form.Category }}</td>
