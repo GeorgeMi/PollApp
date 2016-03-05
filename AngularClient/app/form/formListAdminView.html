@@ -1,0 +1,48 @@
+﻿
+<div ng-controller="FormController as ctrl">
+    <div class="panel panel-default">
+        <div class="panel-heading">Search poll</div>
+        <div class="panel-body">
+            <label class="control-label col-sm-2">Search:</label>
+            <div class="col-sm-8">
+                <input type="text" ng-model="searchText" class="form-control" placeholder="Search">
+            </div>
+
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">All polls</div>
+        <div class="panel-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td>User</td>
+                        <td>Title</td>
+                        <td>Category</td>
+                        <td>Created Date</td>
+                        <td>Deadline</td>
+                        <td>State</td>
+                        <td>Action</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="form in ctrl.forms  | filter:searchText">
+                        <td>{{ form.Username}}</td>
+                        <td>{{ form.Title}}</td>
+                        <td>{{ form.Category }}</td>
+                        <td>{{ form.CreatedDate }}</td>
+                        <td>{{ form.Deadline }}</td>
+                        <td>{{ form.State }}</td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="...">
+                                <button class="btn btn-default" ng-click="ctrl.deleteForm(form.Id)">Delete</button>
+                            </div>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

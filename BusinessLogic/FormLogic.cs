@@ -1,7 +1,9 @@
 ﻿using DataAccess;
 using DataTransferObject;
 using Entities;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace BusinessLogic
@@ -18,10 +20,28 @@ namespace BusinessLogic
             _dataAccess = objDataAccess;
         }
 
-        public List<Form> Form(int id)
+        public List<FormDTO> GetUserForms(string username)
         {
             //returnez toate formurile unui user
-            return _dataAccess.FormRepository.FindAllBy(form => form.UserID == id).ToList();
+            int userID = _dataAccess.UserRepository.FindFirstBy(user => user.Username == username).UserID;
+            List<Form> formList = _dataAccess.FormRepository.FindAllBy(form => form.UserID == userID).ToList();
+            List<FormDTO> formDtoList = new List<FormDTO>();
+            FormDTO formDTO;
+
+            foreach (Form f in formList)
+            {
+                formDTO = new FormDTO();
+                formDTO.Title = f.Title;
+                formDTO.State = f.State;
+                formDTO.CreatedDate = f.CreatedDate.ToString();
+                formDTO.Deadline = f.Deadline.ToString();
+                formDTO.Category = _dataAccess.CategoryRepository.FindFirstBy(category => category.CategoryID == f.CategoryID).Name;
+                formDTO.Username = _dataAccess.UserRepository.FindFirstBy(user => user.UserID == f.UserID).Username;
+                formDTO.Id = f.FormID;
+                formDtoList.Add(formDTO);
+            }
+
+            return formDtoList;
         }
 
         public List<FormDTO> GetAllForms()
@@ -36,9 +56,11 @@ namespace BusinessLogic
                 formDTO = new FormDTO();
                 formDTO.Title = f.Title;
                 formDTO.State = f.State;
-                formDTO.CreatedDate = f.CreatedDate;
-                formDTO.Deadline = f.Deadline;
+                formDTO.CreatedDate = f.CreatedDate.ToString();
+                formDTO.Deadline = f.Deadline.ToString();
                 formDTO.Category = _dataAccess.CategoryRepository.FindFirstBy(category => category.CategoryID == f.CategoryID).Name;
+                formDTO.Username = _dataAccess.UserRepository.FindFirstBy(user => user.UserID == f.UserID).Username;
+                formDTO.Id = f.FormID;
                 formDtoList.Add(formDTO);
             }
 
@@ -52,13 +74,13 @@ namespace BusinessLogic
             Form f = _dataAccess.FormRepository.FindFirstBy(form => form.FormID == id);
 
             formDTO.Title = f.Title;
-            formDTO.CreatedDate = f.CreatedDate;
-            formDTO.Deadline = f.Deadline;
+            formDTO.CreatedDate = f.CreatedDate.ToString();
+            formDTO.Deadline = f.Deadline.ToString();
             formDTO.State = f.State;
             formDTO.Category = GetCategory(f.CategoryID);
             formDTO.Questions = GetAllQuestionFromForm(id);
             formDTO.Username = GetUsername(f.UserID);
-
+            formDTO.Id = f.FormID;
             return formDTO;
 
         }
@@ -115,10 +137,10 @@ namespace BusinessLogic
             return _dataAccess.CategoryRepository.FindFirstBy(cat => cat.Name == name).CategoryID;
         }
 
-        public int GetQuestionID(string content)
+        public int GetQuestionID(string content,int formID)
         {
             //
-            return _dataAccess.QuestionRepository.FindFirstBy(q => q.Content == content).QuestionID;
+            return _dataAccess.QuestionRepository.FindFirstBy(q => q.Content == content && q.FormID == formID).QuestionID;
         }
 
         public void AddCategory(string name)
@@ -132,7 +154,10 @@ namespace BusinessLogic
         public void AddForm(FormDetailDTO formDTO)
         {
             //add form
-            Form form = new Form() { CreatedDate = formDTO.CreatedDate, Deadline = formDTO.Deadline, State = formDTO.State, Title = formDTO.Title };
+            CultureInfo provider = CultureInfo.InvariantCulture;
+         // string format = "ddd MMM d HH:mm:ss GMT";
+
+            Form form = new Form() {CreatedDate = DateTime.Now, Deadline = DateTime.Now.AddDays(7*Int32.Parse(formDTO.Deadline)), State = formDTO.State, Title = formDTO.Title };
             Question q;
             Answer a;
             form.CategoryID = GetCategoryID(formDTO.Category);
@@ -141,7 +166,7 @@ namespace BusinessLogic
             _dataAccess.FormRepository.Add(form);
 
             //add questions
-            int formID = GetFormID(form.Title);
+            int formID = GetFormID(form.Title,form.UserID,form.CreatedDate); //preiau id-ul formului
             int questionID;
             foreach (QuestionDTO questionDTO in formDTO.Questions)
             {
@@ -153,7 +178,7 @@ namespace BusinessLogic
                 _dataAccess.QuestionRepository.Add(q);
 
                 //add answer
-                questionID = GetQuestionID(q.Content);
+                questionID = GetQuestionID(q.Content,formID);
                 foreach (AnswerDTO answerDTO in questionDTO.Answers)
                 {
                     a = new Answer();
@@ -179,22 +204,24 @@ namespace BusinessLogic
             _dataAccess.FormRepository.Delete(f);
         }
 
-        public void DeleteForm(Form f)
+        public int GetFormID(string title, int userID, DateTime createdDate)
         {
-            //sterge form
-            _dataAccess.FormRepository.Delete(f);
-        }
-
-        public int GetFormID(string title)
-        {
+            DateTime date = createdDate.AddSeconds(-5);
             //returneaza id-ul unui form
-            return _dataAccess.FormRepository.FindFirstBy(form => form.Title == title).UserID;
+            return _dataAccess.FormRepository.FindFirstBy(form => form.Title == title && form.UserID == userID && form.CreatedDate >= date).FormID;
         }
 
         public int GetUserID(string username)
         {
-            //returneaza id-ul unui form
+            //returneaza id-ul unui user
             return _dataAccess.UserRepository.FindFirstBy(user => user.Username == username).UserID;
+        }
+
+        public int FormIdCreatedbyUserId(int formID, string userToken)
+        {
+            //returneaza id-ul formului daca formul apartine de userul care are tokenul usertToken
+            int userID = _dataAccess.TokenRepository.FindFirstBy(token => token.TokenString == userToken).UserID;
+            return _dataAccess.FormRepository.FindFirstBy(form => form.FormID == formID && form.UserID == userID).FormID;
         }
 
 

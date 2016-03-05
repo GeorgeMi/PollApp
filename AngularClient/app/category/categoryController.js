@@ -21,7 +21,7 @@
         vm.addCategory = function () {
 
             categoryResource.add.addCategory(vm.category, function (data) {
-                
+
                 categoryResource.get.getCategories(function (data) {
                     vm.category.name = '';
                     vm.categories = data;
@@ -31,13 +31,19 @@
 
         vm.deleteCategory = function (categoryID) {
             var param = { cat_id: categoryID };
-
+            var i;
             categoryResource.delete.deleteCategory(param,
                 function (data) {
 
-                    categoryResource.get.getCategories(function (data) {
-                        vm.categories = data;
-                    });
+                    /*  categoryResource.get.getCategories(function (data) {
+                          vm.categories = data;
+                      });*/
+                    for (i = 0; i < vm.categories.length ; i++) {
+
+                        if (vm.categories[i].CategoryID === categoryID) {
+                            vm.categories.splice(i, 1);
+                        }
+                    }
                 });
         }
     }

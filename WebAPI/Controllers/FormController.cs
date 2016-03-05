@@ -13,7 +13,7 @@ namespace WebAPI.Controllers
     {
         FormModel formModel = new FormModel();
 
-        
+        [RequireToken]
         public IEnumerable<FormDTO> Get()
         {
             List<FormDTO> list = new List<FormDTO>();
@@ -21,15 +21,27 @@ namespace WebAPI.Controllers
             return list;
         }
 
+        [RequireToken]
+        [HttpPost]
+        [ActionName("user")]
+        public IEnumerable<FormDTO> User (string id)
+        {
+            List<FormDTO> list = new List<FormDTO>();
+            list = formModel.GetUserForms(id);
+            return list;
+        }
+
+        [RequireToken]
         public FormDetailDTO Get(int id)
         {
            return formModel.GetContentForm(id);
         }
 
-        public HttpResponseMessage Post(FormDetailDTO formDTO)
+        [RequireToken]
+        public HttpResponseMessage Post([FromBody] FormDetailDTO formDTO)
         {
             HttpResponseMessage responseMessage;
-
+  
             bool response = formModel.AddForm(formDTO);
             if (response)
             {
@@ -41,6 +53,26 @@ namespace WebAPI.Controllers
             }
 
             return responseMessage;
+        }
+
+        [RequireAdminTokenOrUsername]
+        public HttpResponseMessage Delete(int id)
+        {
+            HttpResponseMessage responseMessage;
+
+            bool response = formModel.DeleteForm(id);
+            if (response)
+            {
+                SuccessMessage msg = new SuccessMessage("deleted");
+                responseMessage = Request.CreateResponse(HttpStatusCode.OK);
+            }
+            else
+            {
+                responseMessage = Request.CreateResponse(HttpStatusCode.ExpectationFailed);
+            }
+
+            return responseMessage;
+
         }
     }
 }

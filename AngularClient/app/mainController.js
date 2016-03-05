@@ -7,6 +7,8 @@
     function MainController(userAccount, $cookies) {
         var vm = this;
         vm.isLoggedIn = false;
+        vm.messageRegistration = '';
+        vm.messageLogIn = '';
         vm.message = '';
         vm.role = '';
 
@@ -31,16 +33,17 @@
             new_poll: false,
             manage_users: false,
             manage_polls: false,
-            manage_categories: false
+            manage_categories: false,
+            vote_poll: false
         };
 
         vm.confirm_password = '';
 
         vm.tokenDataRegistration = $cookies.get('token');
 
-      
 
-       
+
+
 
         //------------------register-----------------------
         vm.registerUser = function () {
@@ -51,7 +54,7 @@
 
                     function (data) {
                         //inregistrarea a avut succes
-                        vm.message = data;
+                        vm.messageRegistration = data;
                         vm.userData.username = vm.userDataRegistration.username;
                         vm.userData.password = vm.userDataRegistration.password;
                         vm.login();
@@ -62,33 +65,34 @@
                         vm.isLoggedIn = false;
 
                         if (response.data.error) {
-                            vm.message = response.data.error;
+                            vm.messageRegistration = response.data.error;
                         }
 
                         //validation errors
                         if (response.data.modelState) {
 
                             for (var key in response.data.modelState) {
-                                vm.message += response.data.modelState[key] + "\r\n";
+                                vm.messageRegistration += response.data.modelState[key] + "\r\n";
                             }
                         }
                     });
             }
             else {
 
-                vm.message = "Passwords don't match";
+                vm.messageRegistration = "Passwords don't match";
             }
         }
 
         //-----------------login with username and password-----------------------
         vm.login = function () {
-
+           
             userAccount.login.loginUser(vm.userData,
+
                 function (data) {
                     if (data.error) {
                         vm.isLoggedIn = false;
                         vm.password = "";
-                        vm.message = data.error;
+                        vm.messageLogIn = data.error;
 
                     } else {
                         vm.isLoggedIn = true;
@@ -104,7 +108,12 @@
                         $cookies.put("role", vm.role, { 'expires': expireDate });
 
                     }
-
+            
+                }, function (response) {
+                    //inregistrarea nu a avut succes
+                    vm.isLoggedIn = false;
+                    vm.password = "";
+                    vm.messageLogIn = response.data.error;
                 })
         }
 
@@ -117,7 +126,7 @@
                     if (data.error) {
                         //token invalid
                         vm.isLoggedIn = false;
-                        vm.message = data.error;
+                        vm.messageLogIn = data.error;
 
                     } else {
                         //token acceptat
@@ -151,6 +160,7 @@
             vm.pages.manage_users = false;
             vm.pages.manage_polls = false;
             vm.pages.manage_categories = false;
+            vm.pages.vote_poll = false;
 
         }
 
@@ -163,7 +173,8 @@
             vm.pages.manage_users = false;
             vm.pages.manage_polls = false;
             vm.pages.manage_categories = false;
-
+            vm.pages.vote_poll = false;
+           
             if (mypage == 'home') {
                 vm.pages.home = true;
             }
@@ -185,10 +196,13 @@
             else if (mypage == 'manage_categories') {
                 vm.pages.manage_categories = true;
             }
+            else if (mypage == 'vote_poll') {
+               vm.pages.vote_poll = true;
+            }
         }
 
-       
-       
+
+
 
     };
 })();

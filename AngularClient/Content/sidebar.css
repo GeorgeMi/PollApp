@@ -1,13 +1,14 @@
 ﻿.navbar {
     margin-bottom: 0;
     border-bottom-left-radius: 0;
+    text-decoration:none;
 }
 
 #sidebar-wrapper {
     z-index: 1;
     position: absolute;
-    width: 230px;
-    height: 100%;
+    width: 20%;
+    height:100%;
     overflow-y: hidden;
     background: #2C3E50;
     padding-top:10px;
@@ -16,7 +17,7 @@
 
 #page-content-wrapper {
     width: 100%;
-    padding-left: 230px;
+    padding-left: 20%;
     position: absolute;
     padding-top:10px;
 }

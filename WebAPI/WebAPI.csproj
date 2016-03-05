@@ -161,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionFilters\RequireAdminToken.cs" />
+    <Compile Include="ActionFilters\RequireAdminTokenOrUsername.cs" />
     <Compile Include="ActionFilters\RequireToken.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />

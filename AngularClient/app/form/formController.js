@@ -2,32 +2,32 @@
     "use strict";
     angular
         .module("formManagement")
-        .controller("FormController", ["formResource", FormController]);
+        .controller("FormController", ["formResource", "$cookies", FormController]);
 
-    function FormController(formResource) {
+    function FormController(formResource, $cookies) {
         var vm = this;
 
         //data form to send
         vm.sendForm = {
-            username: '',
+            username: $cookies.get('username'),
             title: '',
             category: '',
             createdDate: '',
             deadline: '',
-            state: '',
+            id: 0,
+            state: 'ok',
+            //  answer: {id:1,answer:"a"}
             questions: [{ id: 1, question: '', answers: [{ id: 1, answer: '' }] }]
         };
 
         vm.sendFormMessage = '';
-        //max val 
+        //max vals
         vm.maxQuestionCount = 20;
         vm.maxAnswerCount = 6;
 
-        //------------------add form-----------------------
-
         //add question
         vm.addNewQuestion = function () {
-            alert("asdsad");
+
             var questionID = vm.sendForm.questions.length + 1;
 
             if (questionID <= vm.maxQuestionCount) {
@@ -92,9 +92,55 @@
             }
         }
 
-        formResource.query(function (data) {
+        formResource.get.getForms(function (data) {
+
             vm.forms = data;
         });
+
+
+
+        vm.addForm = function () {
+            // alert(vm.sendForm);
+            var x = JSON.stringify(vm.sendForm)
+
+            formResource.add.addForm(x,
+                //s-a creat cu succes
+                function (data) {
+                    vm.sendForm.title = '';
+                    vm.sendForm.category = '';
+                    vm.sendForm.createdDate = '';
+                    vm.sendForm.deadline = '';
+                    vm.sendForm.questions = [{ id: 1, question: '', answers: [{ id: 1, answer: '' }] }];
+                    vm.messageForm = 'Poll created successfully';
+                },
+
+               //nu s-a creat
+                function (response) {
+                    if (response.data.error) {
+                        vm.messageForm = response.data.error;
+                    }
+                    else {
+
+                    }
+                });
+        }
+
+        vm.deleteForm = function (formID) {
+            var param = { form_id: formID };
+            var i;
+           // alert(formID);
+
+            formResource.delete.deleteForm(param,
+                function (data) {
+
+                    for (i = 0; i < vm.forms.length ; i++) {
+
+                        if (vm.forms[i].Id === formID) {
+                            vm.forms.splice(i, 1);
+                        }
+                    }
+                });
+        }
 
     }
 }());

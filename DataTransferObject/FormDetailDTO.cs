@@ -19,10 +19,10 @@ namespace DataTransferObject
         public string Title { get; set; }
         public string Username { get; set; }
         public string Category { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public System.DateTime Deadline { get; set; }
+        public string CreatedDate { get; set; }
+        public string Deadline { get; set; }
         public string State { get; set; }
+        public int Id { get; set; }
         public List<QuestionDTO> Questions { get; set; }
-
     }
 }

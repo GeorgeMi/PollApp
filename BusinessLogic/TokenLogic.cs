@@ -54,7 +54,7 @@ namespace BusinessLogic
             return _dataAccess.UserRepository.FindFirstBy(user => user.UserID == userID).Role;
         }
 
-        public string UpdateToken(int id, string username)
+        public string UpdateToken(int id, string username, string password)
         {
             Token t;
             DateTime expirationDate;
@@ -73,7 +73,7 @@ namespace BusinessLogic
                 expirationDate = DateTime.Now.AddHours(3);
 
                 //creez token string
-                text = t.TokenID.ToString() + username + createdDate.ToString();
+                text = t.TokenID.ToString() + username + password + createdDate.ToString();
 
                 md5 = new MD5CryptoServiceProvider();
                 textToHash = Encoding.Default.GetBytes(text);

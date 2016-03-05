@@ -53,7 +53,7 @@ namespace BusinessLogic
             }
             else
             {
-                string token = TokenLogic.UpdateToken(userID, username);
+                string token = TokenLogic.UpdateToken(userID, username,password);
                 return token;
             }
         }
@@ -128,7 +128,7 @@ namespace BusinessLogic
                     return false;
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 //userul nu exista
                 return false;

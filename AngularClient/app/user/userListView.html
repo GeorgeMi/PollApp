@@ -35,9 +35,8 @@
                             <div class="btn-group" role="group" aria-label="...">
                                 <button ng-if="user.Role =='admin'" class="btn btn-default" ng-click="vm.demote(user.UserID)">Demote&nbsp;</button>
                                 <button ng-if="user.Role =='user'" class="btn btn-default" ng-click="vm.promote(user.UserID)">Promote</button>
-                                <button class="btn btn-default" ng-click="vm.delete(user.UserID)">Delete</button>
+                                <button class="btn btn-default" ng-click="vm.deleteUser(user.UserID)">Delete</button>
                             </div>
-
                         </td>
                     </tr>
                 </tbody>
