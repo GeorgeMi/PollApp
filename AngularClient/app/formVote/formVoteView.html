@@ -5,10 +5,12 @@
             <form class="form-horizontal">
                 <div data-ng-repeat="question in ctrl.detailedForm.Questions">
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="pwd">{{question.Question}}</label>
-                        <div class="col-sm-offset-2 col-sm-10" ng-repeat="answer in question.Answers ">
-                            <input type="radio" name="{{question.Question}}" value="{{ answer.Answer }}">{{ answer.Answer }}<br>
-                       </div>
+                        <label class="col-sm-offset-2 col-sm-10" for="pwd">{{question.Question}}</label>
+                        <div class="col-sm-offset-3 col-sm-10" ng-repeat="answer in question.Answers">
+
+                            <input type="radio" name="{{ question.Answers }}" value="{{ answer.AnswerID }}" ng-model="ctrl.voteForm.answers[question.nrCrt].answer " required> {{ answer.Answer }}<br>
+                        </div>
+
                     </div>
                 </div>
 
@@ -21,8 +23,10 @@
             </form>
 
             <div id="choicesDisplay">
-                {{ ctrl.detailedForm }}
+                {{ ctrl.voteForm }}
+
             </div>
         </div>
     </div>
+    {{ ctrl.detailedForm }}
 </div>

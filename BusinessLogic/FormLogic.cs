@@ -99,7 +99,9 @@ namespace BusinessLogic
             {
                 questionDTO = new QuestionDTO();
                 questionDTO.Question = q.Content;
+                questionDTO.QuestionID = q.QuestionID;
                 questionDTO.Answers = GetAllAnswerFromQuestion(q.QuestionID);
+
 
                 questionDTOList.Add(questionDTO);
 
@@ -119,6 +121,7 @@ namespace BusinessLogic
             {
                 answerDTO = new AnswerDTO();
                 answerDTO.Answer = a.Content;
+                answerDTO.AnswerID = a.AnswerID;
                 answerDTOList.Add(answerDTO);
             }
             return answerDTOList;
