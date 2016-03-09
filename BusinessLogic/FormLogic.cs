@@ -140,7 +140,7 @@ namespace BusinessLogic
             return _dataAccess.CategoryRepository.FindFirstBy(cat => cat.Name == name).CategoryID;
         }
 
-        public int GetQuestionID(string content,int formID)
+        public int GetQuestionID(string content, int formID)
         {
             //
             return _dataAccess.QuestionRepository.FindFirstBy(q => q.Content == content && q.FormID == formID).QuestionID;
@@ -158,9 +158,9 @@ namespace BusinessLogic
         {
             //add form
             CultureInfo provider = CultureInfo.InvariantCulture;
-         // string format = "ddd MMM d HH:mm:ss GMT";
+            // string format = "ddd MMM d HH:mm:ss GMT";
 
-            Form form = new Form() {CreatedDate = DateTime.Now, Deadline = DateTime.Now.AddDays(7*Int32.Parse(formDTO.Deadline)), State = formDTO.State, Title = formDTO.Title };
+            Form form = new Form() { CreatedDate = DateTime.Now, Deadline = DateTime.Now.AddDays(7 * Int32.Parse(formDTO.Deadline)), State = formDTO.State, Title = formDTO.Title };
             Question q;
             Answer a;
             form.CategoryID = GetCategoryID(formDTO.Category);
@@ -169,7 +169,7 @@ namespace BusinessLogic
             _dataAccess.FormRepository.Add(form);
 
             //add questions
-            int formID = GetFormID(form.Title,form.UserID,form.CreatedDate); //preiau id-ul formului
+            int formID = GetFormID(form.Title, form.UserID, form.CreatedDate); //preiau id-ul formului
             int questionID;
             foreach (QuestionDTO questionDTO in formDTO.Questions)
             {
@@ -181,7 +181,7 @@ namespace BusinessLogic
                 _dataAccess.QuestionRepository.Add(q);
 
                 //add answer
-                questionID = GetQuestionID(q.Content,formID);
+                questionID = GetQuestionID(q.Content, formID);
                 foreach (AnswerDTO answerDTO in questionDTO.Answers)
                 {
                     a = new Answer();
@@ -227,6 +227,48 @@ namespace BusinessLogic
             return _dataAccess.FormRepository.FindFirstBy(form => form.FormID == formID && form.UserID == userID).FormID;
         }
 
+        public VoteResultDTO Vote(VoteListDTO voteListDTO)
+        {
+            //incrementez numarul de voturi pentru fiecare intrebare si raspuns
+            foreach (VoteDTO voteDTO in voteListDTO.Answers)
+            {
+                _dataAccess.AnswerRepository.AddVote(voteDTO.Answer);
+                _dataAccess.QuestionRepository.AddVote(voteDTO.Question);
+            }
 
+            //preiau rezultatele din baza de date pentru fiecare intrebare si raspuns
+            VoteResultDTO voteResult = new VoteResultDTO();
+            voteResult.Questions = new List<VoteQuestionResultDTO>();
+
+            VoteQuestionResultDTO voteQuestionResult;
+            VoteAnswerResultDTO voteAnswerResult;
+            List<Answer> listAnswer;
+
+            foreach (VoteDTO voteDTO in voteListDTO.Answers)
+            {
+                listAnswer = _dataAccess.AnswerRepository.FindAllBy(answer => answer.QuestionID == voteDTO.Question).ToList();
+                voteQuestionResult = new VoteQuestionResultDTO();
+               
+                //id-ul si nr voturi intrebare
+                voteQuestionResult.QuestionID = voteDTO.Question;
+                voteQuestionResult.QuestionNrVotes = Decimal.ToInt32(_dataAccess.QuestionRepository.FindFirstBy(question => question.QuestionID == voteDTO.Question).NrVotes);
+                voteQuestionResult.Answers = new List<VoteAnswerResultDTO>();
+
+                foreach (Answer a in listAnswer)
+                {
+                    voteAnswerResult = new VoteAnswerResultDTO();
+                    voteAnswerResult.AnswerID = a.AnswerID;
+                    voteAnswerResult.AnswerNrVotes= Decimal.ToInt32(_dataAccess.AnswerRepository.FindFirstBy(answer => answer.AnswerID == a.AnswerID).NrVotes);
+                   
+                    voteQuestionResult.Answers.Add(voteAnswerResult);
+                }
+               
+                voteResult.Questions.Add(voteQuestionResult);
+            }
+
+            return voteResult;
+
+        }
+          
     }
 }

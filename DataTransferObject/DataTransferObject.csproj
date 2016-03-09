@@ -50,6 +50,11 @@
     <Compile Include="UserDetailDTO.cs" />
     <Compile Include="UserDTO.cs" />
     <Compile Include="UserRegistrationDTO.cs" />
+    <Compile Include="VoteAnswerResultDTO.cs" />
+    <Compile Include="VoteDTO.cs" />
+    <Compile Include="VoteListDTO.cs" />
+    <Compile Include="VoteQuestionResultDTO.cs" />
+    <Compile Include="VoteResultDTO.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

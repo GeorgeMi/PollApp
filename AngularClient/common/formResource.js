@@ -46,6 +46,15 @@
                    }
 
                }),
+            //send form with vote
+            vote: $resource(appSettings.serverPath + "/api/vote", null,
+              {
+                  'voteForm': {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json', 'token': $cookies.get('token') }
+                  }
+
+              }),
             //all forms from user
             getForms: $resource(appSettings.serverPath + "/api/form/user/" + $cookies.get('username'), null,
                       {

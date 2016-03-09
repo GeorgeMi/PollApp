@@ -21,5 +21,12 @@ namespace DataAccess.Repository.Implementations
         {
 
         }
+        public void AddVote(int id)
+        {
+            Answer a = Context.Answers.Find(id);
+            a.NrVotes = a.NrVotes + 1;
+      
+            Context.SaveChanges();
+        }
     }
 }

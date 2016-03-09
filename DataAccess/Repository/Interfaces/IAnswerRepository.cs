@@ -15,5 +15,6 @@ namespace DataAccess.Repository.Interfaces
 {
     public interface IAnswerRepository : IGenericRepository<Answer>
     {
+        void AddVote(int id);
     }
 }
