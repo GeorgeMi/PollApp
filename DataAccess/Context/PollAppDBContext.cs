@@ -1,5 +1,4 @@
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using DataAccess.Mapping;
 using Entities;
 
@@ -24,6 +23,7 @@ namespace DataAccess.Context
         public DbSet<sysdiagram> sysdiagrams { get; set; }
         public DbSet<Token> Tokens { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<VotedForms> VotedForms { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -34,6 +34,7 @@ namespace DataAccess.Context
             modelBuilder.Configurations.Add(new sysdiagramMap());
             modelBuilder.Configurations.Add(new TokenMap());
             modelBuilder.Configurations.Add(new UserMap());
+            modelBuilder.Configurations.Add(new VotedFormMap());
         }
     }
 }

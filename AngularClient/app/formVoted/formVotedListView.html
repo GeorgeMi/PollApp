@@ -1,4 +1,4 @@
-﻿<div ng-controller="FormUserController as ctrl">
+﻿<div ng-controller="FormVotedController as ctrl">
     <div class="panel panel-default">
         <div class="panel-heading">Search poll</div>
         <div class="panel-body">
@@ -6,8 +6,7 @@
         </div>
     </div>
 
-    <div ng-repeat="form in ctrl.userForms | filter:searchText">
-       
+       <div ng-repeat="form in ctrl.forms | filter:searchText">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     User: {{ form.Username}}
@@ -29,11 +28,13 @@
                         <h5>Deadline: {{ form.Deadline }}</h5>
                     </div>
                     <div class="col-sm-6 col-md-4">
-                        <div class="btn btn-default" title="View results" ng-click="vm.changePage(ctrl.changeID(form.Id))">View Results</div>
-                        <div class="btn btn-default" title="Delete poll" ng-click="ctrl.deleteForm(form.Id)">x</div>
+
+                        <div ng-click="">
+                            <a href="#" class="btn btn-default btn-lg" role="button" ng-click="vm.changePage(ctrl.viewResults(form.Id))">View results</a>
+                        </div>
                        
-                    </div>
-              
+                </div>
+
             </div>
         </div>
     </div>

@@ -21,6 +21,7 @@ namespace DataAccess
         public IQuestionRepository QuestionRepository { get; set; }
         public IAnswerRepository AnswerRepository { get; set; }
         public IFormRepository FormRepository { get; set; }
+        public IVotedFormsRepository VotedFormsRepository { get; set; }
 
         public DataAccess()
         {
@@ -31,6 +32,7 @@ namespace DataAccess
             QuestionRepository = new QuestionRepository(context);
             AnswerRepository = new AnswerRepository(context);
             FormRepository = new FormRepository(context);
+            VotedFormsRepository = new VotedFormsRepository(context);
         }
 
     }

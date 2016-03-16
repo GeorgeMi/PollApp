@@ -126,20 +126,30 @@
         }
 
         vm.deleteForm = function (formID) {
-            var param = { form_id: formID };
-            var i;
-           // alert(formID);
+            var r = confirm("Are you sure that you want to permanently delete this form?");
+            if (r == true) {
 
-            formResource.delete.deleteForm(param,
-                function (data) {
+                var param = { form_id: formID };
+                var i;
+                // alert(formID);
 
-                    for (i = 0; i < vm.forms.length ; i++) {
+                formResource.delete.deleteForm(param,
+                    function (data) {
 
-                        if (vm.forms[i].Id === formID) {
-                            vm.forms.splice(i, 1);
+                        for (i = 0; i < vm.forms.length ; i++) {
+
+                            if (vm.forms[i].Id === formID) {
+                                vm.forms.splice(i, 1);
+                            }
                         }
-                    }
-                });
+                    });
+            }
+        }
+
+        vm.viewResults = function (id) {
+            //alert("cookie");
+            $cookies.put('my_poll_result', id);
+            return 'my_poll_result';
         }
 
     }

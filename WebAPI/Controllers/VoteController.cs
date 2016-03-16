@@ -18,7 +18,10 @@ namespace WebAPI.Controllers
         [RequireToken]
         public VoteResultDTO Post([FromBody] VoteListDTO voteDTO)
         {
-            return formModel.Vote(voteDTO);
+            string token = Request.Headers.SingleOrDefault(x => x.Key == "token").Value.First();
+
+            VoteResultDTO result = formModel.Vote(voteDTO,token);
+            return result;
         }
 
     }

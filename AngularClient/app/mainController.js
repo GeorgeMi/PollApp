@@ -29,12 +29,14 @@
         vm.pages = {
             home: true,
             my_polls: false,
+            my_poll_result: false,
             categories: false,
             new_poll: false,
             manage_users: false,
             manage_polls: false,
             manage_categories: false,
-            vote_poll: false
+            vote_poll: false,
+            voted_polls: false
         };
 
         vm.confirm_password = '';
@@ -155,12 +157,14 @@
 
             vm.pages.home = false;
             vm.pages.categories = false;
+            vm.pages.my_poll_result = false;
             vm.pages.my_polls = false;
             vm.pages.new_poll = false;
             vm.pages.manage_users = false;
             vm.pages.manage_polls = false;
             vm.pages.manage_categories = false;
             vm.pages.vote_poll = false;
+            vm.pages.voted_polls = false;
 
         }
 
@@ -169,11 +173,13 @@
             vm.pages.home = false;
             vm.pages.categories = false;
             vm.pages.my_polls = false;
+            vm.pages.my_poll_result = false;
             vm.pages.new_poll = false;
             vm.pages.manage_users = false;
             vm.pages.manage_polls = false;
             vm.pages.manage_categories = false;
             vm.pages.vote_poll = false;
+            vm.pages.voted_polls = false;
            
             if (mypage == 'home') {
                 vm.pages.home = true;
@@ -199,6 +205,13 @@
             else if (mypage == 'vote_poll') {
                vm.pages.vote_poll = true;
             }
+            else if (mypage == 'my_poll_result') {
+                vm.pages.my_poll_result = true;
+            }
+            else if (mypage == 'voted_polls') {
+                vm.pages.voted_polls = true;
+            }
+            
         }
 
 

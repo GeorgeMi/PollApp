@@ -31,7 +31,8 @@
                     <div class="col-sm-6 col-md-4">
 
                         <div ng-click="">
-                           <a href="#" class="btn btn-default btn-lg" role="button" ng-click="vm.changePage(ctrlVote.changeID(form.Id))">Vote</a>
+                           <a ng-hide="form.Voted" href="#" class="btn btn-default btn-lg" role="button" ng-click="vm.changePage(ctrlVote.changeID(form.Id))">Vote</a>
+                           <a ng-if="form.Voted" href="#" class="btn btn-default btn-lg" role="button" ng-click="vm.changePage(ctrl.viewResults(form.Id))">View results</a>
                         </div>
                         <div ng-if="vm.userData.username == form.Username" class="btn btn-default" title="Delete poll" ng-click="ctrl.deleteForm(form.Id)">x</div>
 

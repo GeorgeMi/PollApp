@@ -1,5 +1,6 @@
 ﻿using DataTransferObject;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -16,15 +17,17 @@ namespace WebAPI.Controllers
         [RequireToken]
         public IEnumerable<FormDTO> Get()
         {
+            string token = Request.Headers.SingleOrDefault(x => x.Key == "token").Value.First();
+           
             List<FormDTO> list = new List<FormDTO>();
-            list = formModel.GetAllForms();
+            list = formModel.GetAllForms(token);
             return list;
         }
 
         [RequireToken]
         [HttpPost]
         [ActionName("user")]
-        public IEnumerable<FormDTO> User (string id)
+        public IEnumerable<FormDTO> User(string id)
         {
             List<FormDTO> list = new List<FormDTO>();
             list = formModel.GetUserForms(id);
@@ -32,11 +35,31 @@ namespace WebAPI.Controllers
         }
 
         [RequireToken]
-        public FormDetailDTO Get(int id)
+        [HttpGet]
+        [ActionName("result")]
+        public VoteResultDetailDTO Result(int id) //returneaza rezultatul unui sondaj propriu
+        {
+            VoteResultDetailDTO voteResult = formModel.GetDetailResultForm(id);
+            return voteResult;
+        }
+
+        [RequireToken]
+        [HttpGet]
+        [ActionName("getForm")]
+        public FormDetailDTO GetForm(int id)
         {
            return formModel.GetContentForm(id);
         }
 
+        [RequireToken]
+        [HttpGet]
+        [ActionName("voted")]
+        public IEnumerable<FormDTO> Voted(string id) //returneaza lista sondajelor votate de catre un user
+        {
+            List<FormDTO> list = new List<FormDTO>();
+            list = formModel.GetVotedForms(id);
+            return list;
+        }
         [RequireToken]
         public HttpResponseMessage Post([FromBody] FormDetailDTO formDTO)
         {

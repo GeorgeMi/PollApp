@@ -4,6 +4,7 @@ using Entities;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 
 namespace BusinessLogic
@@ -44,13 +45,57 @@ namespace BusinessLogic
             return formDtoList;
         }
 
-        public List<FormDTO> GetAllForms()
+        public VoteResultDetailDTO GetDetailResultForm(int id)
         {
-            //returneaza toate formurile 
-            List<Form> formList = _dataAccess.FormRepository.GetAll().ToList();
+            //returneaza rezultatul unui sondaj cu tot cu intrebari si raspunsuri
+            VoteResultDetailDTO voteResult = new VoteResultDetailDTO();
+            voteResult.Questions = new List<VoteQuestionResultDetailDTO>();
+            voteResult.Title = _dataAccess.FormRepository.FindFirstBy(f => f.FormID == id).Title;
+
+            List<Question> questionList = _dataAccess.QuestionRepository.FindAllBy(q => q.FormID == id).ToList();
+            List<Answer> answerList;
+
+            VoteQuestionResultDetailDTO questionDTO;
+            VoteAnswerDetailResultDTO answerDTO;
+            
+            foreach (Question q in questionList)
+            {
+                questionDTO = new VoteQuestionResultDetailDTO();
+                questionDTO.Answers = new List<VoteAnswerDetailResultDTO>();
+                questionDTO.Question = q.Content;
+                answerList = _dataAccess.AnswerRepository.FindAllBy(a => a.QuestionID == q.QuestionID).ToList();
+
+                foreach (Answer a in answerList)
+                {
+                    answerDTO = new VoteAnswerDetailResultDTO();
+                    answerDTO.Answer = a.Content;
+                    answerDTO.AnswerNrVotes = Decimal.ToInt32(a.NrVotes);
+                    questionDTO.Answers.Add(answerDTO);
+                }
+
+                voteResult.NrVotes = Decimal.ToInt32(q.NrVotes);
+                voteResult.Questions.Add(questionDTO);
+            }
+           
+            return voteResult;
+        }
+
+        public List<FormDTO> GetVotedForms(string username)
+        {
+            //returneaza toate formurile votate de catre un user
+            int userID = _dataAccess.UserRepository.FindFirstBy(user => user.Username == username).UserID;
+            List<Form> formList=new List<Form>();
+            List<VotedForms> votedFormsList = _dataAccess.VotedFormsRepository.FindAllBy(voted=>voted.UserID == userID).ToList();
             List<FormDTO> formDtoList = new List<FormDTO>();
             FormDTO formDTO;
+            Form form;
 
+            foreach (VotedForms votedForm in votedFormsList)
+            {
+                form = _dataAccess.FormRepository.FindFirstBy(f => f.FormID == votedForm.FormID);
+                formList.Add(form);
+            }
+          
             foreach (Form f in formList)
             {
                 formDTO = new FormDTO();
@@ -61,6 +106,45 @@ namespace BusinessLogic
                 formDTO.Category = _dataAccess.CategoryRepository.FindFirstBy(category => category.CategoryID == f.CategoryID).Name;
                 formDTO.Username = _dataAccess.UserRepository.FindFirstBy(user => user.UserID == f.UserID).Username;
                 formDTO.Id = f.FormID;
+                formDTO.Voted = true;
+                                                
+                formDtoList.Add(formDTO);
+            }
+
+            return formDtoList;
+        }
+
+        public List<FormDTO> GetAllForms(string token)
+        {
+            //returneaza toate formurile 
+            List<Form> formList = _dataAccess.FormRepository.GetAll().ToList();
+            List<FormDTO> formDtoList = new List<FormDTO>();
+            FormDTO formDTO;
+
+            int userID = _dataAccess.TokenRepository.FindFirstBy(user => user.TokenString == token).UserID;
+           
+            foreach (Form f in formList)
+            {
+                formDTO = new FormDTO();
+                formDTO.Title = f.Title;
+                formDTO.State = f.State;
+                formDTO.CreatedDate = f.CreatedDate.ToString();
+                formDTO.Deadline = f.Deadline.ToString();
+                formDTO.Category = _dataAccess.CategoryRepository.FindFirstBy(category => category.CategoryID == f.CategoryID).Name;
+                formDTO.Username = _dataAccess.UserRepository.FindFirstBy(user => user.UserID == f.UserID).Username;
+                formDTO.Id = f.FormID;
+                formDTO.Voted = true;
+
+                try
+                {
+                  userID = _dataAccess.VotedFormsRepository.FindFirstBy(voted => voted.FormID == f.FormID && voted.UserID == userID).UserID;
+                }
+                catch
+                { 
+                    //daca userul a votat sondajul deja, nu il va mai putea vota
+                    formDTO.Voted = false;
+                }
+
                 formDtoList.Add(formDTO);
             }
 
@@ -227,46 +311,65 @@ namespace BusinessLogic
             return _dataAccess.FormRepository.FindFirstBy(form => form.FormID == formID && form.UserID == userID).FormID;
         }
 
-        public VoteResultDTO Vote(VoteListDTO voteListDTO)
+        public VoteResultDTO Vote(VoteListDTO voteListDTO, string token)
         {
-            //incrementez numarul de voturi pentru fiecare intrebare si raspuns
-            foreach (VoteDTO voteDTO in voteListDTO.Answers)
+            int userID = _dataAccess.UserRepository.FindFirstBy(user => user.Username == voteListDTO.Username).UserID;
+            int questionID;
+            
+            //testeaza daca tokenul si userul care a votat coincid
+            if (userID == _dataAccess.TokenRepository.FindFirstBy(user => user.TokenString == token).UserID)
             {
-                _dataAccess.AnswerRepository.AddVote(voteDTO.Answer);
-                _dataAccess.QuestionRepository.AddVote(voteDTO.Question);
-            }
+                questionID= voteListDTO.Answers[0].Question;
 
-            //preiau rezultatele din baza de date pentru fiecare intrebare si raspuns
-            VoteResultDTO voteResult = new VoteResultDTO();
-            voteResult.Questions = new List<VoteQuestionResultDTO>();
+                int formID = _dataAccess.QuestionRepository.FindFirstBy(question => question.QuestionID == questionID).FormID;
 
-            VoteQuestionResultDTO voteQuestionResult;
-            VoteAnswerResultDTO voteAnswerResult;
-            List<Answer> listAnswer;
+                //incrementez numarul de voturi pentru fiecare intrebare si raspuns
 
-            foreach (VoteDTO voteDTO in voteListDTO.Answers)
-            {
-                listAnswer = _dataAccess.AnswerRepository.FindAllBy(answer => answer.QuestionID == voteDTO.Question).ToList();
-                voteQuestionResult = new VoteQuestionResultDTO();
-               
-                //id-ul si nr voturi intrebare
-                voteQuestionResult.QuestionID = voteDTO.Question;
-                voteQuestionResult.QuestionNrVotes = Decimal.ToInt32(_dataAccess.QuestionRepository.FindFirstBy(question => question.QuestionID == voteDTO.Question).NrVotes);
-                voteQuestionResult.Answers = new List<VoteAnswerResultDTO>();
-
-                foreach (Answer a in listAnswer)
+                foreach (VoteDTO voteDTO in voteListDTO.Answers)
                 {
-                    voteAnswerResult = new VoteAnswerResultDTO();
-                    voteAnswerResult.AnswerID = a.AnswerID;
-                    voteAnswerResult.AnswerNrVotes= Decimal.ToInt32(_dataAccess.AnswerRepository.FindFirstBy(answer => answer.AnswerID == a.AnswerID).NrVotes);
-                   
-                    voteQuestionResult.Answers.Add(voteAnswerResult);
+                    _dataAccess.AnswerRepository.AddVote(voteDTO.Answer);
+                    _dataAccess.QuestionRepository.AddVote(voteDTO.Question);
                 }
-               
-                voteResult.Questions.Add(voteQuestionResult);
-            }
 
-            return voteResult;
+                //preiau rezultatele din baza de date pentru fiecare intrebare si raspuns
+                VoteResultDTO voteResult = new VoteResultDTO();
+                voteResult.Questions = new List<VoteQuestionResultDTO>();
+
+                VoteQuestionResultDTO voteQuestionResult;
+                VoteAnswerResultDTO voteAnswerResult;
+                List<Answer> listAnswer;
+
+                foreach (VoteDTO voteDTO in voteListDTO.Answers)
+                {
+                    listAnswer = _dataAccess.AnswerRepository.FindAllBy(answer => answer.QuestionID == voteDTO.Question).ToList();
+                    voteQuestionResult = new VoteQuestionResultDTO();
+
+                    //id-ul si nr voturi intrebare
+                    voteQuestionResult.QuestionID = voteDTO.Question;
+                    voteQuestionResult.QuestionNrVotes = Decimal.ToInt32(_dataAccess.QuestionRepository.FindFirstBy(question => question.QuestionID == voteDTO.Question).NrVotes);
+                    voteQuestionResult.Answers = new List<VoteAnswerResultDTO>();
+
+                    foreach (Answer a in listAnswer)
+                    {
+                        voteAnswerResult = new VoteAnswerResultDTO();
+                        voteAnswerResult.AnswerID = a.AnswerID;
+                        voteAnswerResult.AnswerNrVotes = Decimal.ToInt32(_dataAccess.AnswerRepository.FindFirstBy(answer => answer.AnswerID == a.AnswerID).NrVotes);
+
+                        voteQuestionResult.Answers.Add(voteAnswerResult);
+                    }
+
+                    voteResult.Questions.Add(voteQuestionResult);
+                }
+
+                VotedForms voted = new VotedForms();
+                voted.UserID = userID;
+                voted.FormID = formID;
+
+                //adauga sondajul in lista sondajelor votate de userul respectiv
+                _dataAccess.VotedFormsRepository.Add(voted);
+                return voteResult;
+            }
+            else throw new Exception("Poll already voted!");
 
         }
           

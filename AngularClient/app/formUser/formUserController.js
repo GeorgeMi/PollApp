@@ -34,5 +34,11 @@
                 });
         }
 
+        vm.changeID = function (id) {
+            //alert("cookie");
+            $cookies.put('my_poll_result', id);
+            return 'my_poll_result';
+        }
+
     }
 }());

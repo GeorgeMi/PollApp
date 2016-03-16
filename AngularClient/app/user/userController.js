@@ -12,19 +12,25 @@
         });
 
         vm.deleteUser = function (userID) {
-            var param = { user_id: userID };
-            var i;
+            var r = confirm("Are you sure that you want to permanently delete this user?");
 
-            userResource.delete.deleteUser(param,
-                function (data) {
+            if (r == true) {
 
-                    for (i = 0; i < vm.users.length ; i++) {
+                var param = { user_id: userID };
+                var i;
 
-                        if (vm.users[i].UserID === userID) {
-                            vm.users.splice(i, 1);
+                userResource.delete.deleteUser(param,
+                    function (data) {
+
+                        for (i = 0; i < vm.users.length ; i++) {
+
+                            if (vm.users[i].UserID === userID) {
+                                vm.users.splice(i, 1);
+                            }
                         }
-                    }
-                });
+
+                    });
+            }
         }
 
         vm.promote = function (userID) {

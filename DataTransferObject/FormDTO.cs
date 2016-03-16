@@ -21,6 +21,7 @@ namespace DataTransferObject
         public string State { get; set; }
         public string Username { get; set; }
         public int Id { get; set; }
+        public bool Voted { get; set; }
 
     }
 }

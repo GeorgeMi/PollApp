@@ -58,6 +58,7 @@
     <Compile Include="Mapping\sysdiagramMap.cs" />
     <Compile Include="Mapping\TokenMap.cs" />
     <Compile Include="Mapping\UserMap.cs" />
+    <Compile Include="Mapping\VotedFormMap.cs" />
     <Compile Include="Context\PollAppDBContext.cs" />
     <Compile Include="Repository\Implementations\AnswerRepository.cs" />
     <Compile Include="Repository\Implementations\CategoryRepository.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Repository\Implementations\QuestionRepository.cs" />
     <Compile Include="Repository\Implementations\TokenRepository.cs" />
     <Compile Include="Repository\Implementations\UserRepository.cs" />
+    <Compile Include="Repository\Implementations\VotedFormsRepository.cs" />
     <Compile Include="Repository\Interfaces\IAnswerRepository.cs" />
     <Compile Include="Repository\Interfaces\ICategoryRepository.cs" />
     <Compile Include="Repository\Interfaces\IFormRepository.cs" />
@@ -74,6 +76,7 @@
     <Compile Include="Repository\Interfaces\IQuestionRepository.cs" />
     <Compile Include="Repository\Interfaces\ITokenRepository.cs" />
     <Compile Include="Repository\Interfaces\IUserRepository.cs" />
+    <Compile Include="Repository\Interfaces\IVotedFormsRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

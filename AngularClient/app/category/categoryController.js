@@ -30,21 +30,26 @@
         }
 
         vm.deleteCategory = function (categoryID) {
-            var param = { cat_id: categoryID };
-            var i;
-            categoryResource.delete.deleteCategory(param,
-                function (data) {
+            var r = confirm("Are you sure that you want to permanently delete this category?");
 
-                    /*  categoryResource.get.getCategories(function (data) {
-                          vm.categories = data;
-                      });*/
-                    for (i = 0; i < vm.categories.length ; i++) {
+            if (r == true) {
 
-                        if (vm.categories[i].CategoryID === categoryID) {
-                            vm.categories.splice(i, 1);
+                var param = { cat_id: categoryID };
+                var i;
+                categoryResource.delete.deleteCategory(param,
+                    function (data) {
+
+                        /*  categoryResource.get.getCategories(function (data) {
+                              vm.categories = data;
+                          });*/
+                        for (i = 0; i < vm.categories.length ; i++) {
+
+                            if (vm.categories[i].CategoryID === categoryID) {
+                                vm.categories.splice(i, 1);
+                            }
                         }
-                    }
-                });
+                    });
+            }
         }
     }
 }());

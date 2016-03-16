@@ -11,6 +11,7 @@
 
         //a votat userul?
         vm.voted = false;
+        vm.showResults = false;
         //array pentru raspuns
         vm.voteForm = {
             username: $cookies.get('username'),
@@ -56,59 +57,67 @@
             // alert(vm.sendForm);
             var x = JSON.stringify(vm.voteForm)
 
-            formResource.vote.voteForm(x,
-                //s-a creat cu succes
-                function (data) {
-                    var i,j,k;
+            //s-au votat toate intrebarile
+            if (x.indexOf(":0") == -1) {
 
-                    for (i = 0; i < vm.voteForm.answers.length; i++) {
-                        //deja este un rand introdus la initializare
-                        vm.voteForm.answers[i].answer = 0;
-                    }
-                    vm.results = data;
-                    vm.voted = true;
-                    vm.messageForm = 'Poll voted successfully';
+                formResource.vote.voteForm(x,
+                    //s-a creat cu succes
+                    function (data) {
+                        var i;
 
-                 //   alert(vm.detailedForm.Questions[2].Question);
-                   
-                   
-                    vm.chartResult = [];
-                    //prelucrare pentru afisare statistica
-                    for (i = 0; i < vm.results.Questions.length; i++) {
+                        for (i = 0; i < vm.voteForm.answers.length; i++) {
+                            //deja este un rand introdus la initializare
+                            vm.voteForm.answers[i].answer = 0;
+                        }
+                        vm.results = data;
 
-                        vm.chartResult[i] = [];
-                        vm.chartResult[i].chartLabels = [];
-                        vm.chartResult[i].chartData = [];
+                        vm.voted = true;
+                        vm.messageForm = 'Poll voted successfully';
 
-                        for (j = 0; j < vm.results.Questions[i].Answers.length; j++) {
-                            
-                            for (k = 0; k < vm.detailedForm.Questions[i].Answers.length; k++) {
-                            
-                                if (vm.detailedForm.Questions[i].Answers[k].AnswerID == vm.results.Questions[i].Answers[j].AnswerID) {
-                                    //compar detailed form si id-ul din raspuns 
-                                  
-                                    vm.chartResult[i].chartLabels.push(vm.detailedForm.Questions[i].Answers[k].Answer);
-                                }
-                            }
-                            vm.chartResult[i].chartData.push(vm.results.Questions[i].Answers[j].AnswerNrVotes);
+                    },
+
+                   //nu s-a creat
+                    function (response) {
+                        if (response.data.error) {
+                            vm.messageForm = response.data.error;
+                        }
+                        else {
 
                         }
-                    
-                    }
-                   
-                },
-
-               //nu s-a creat
-                function (response) {
-                    if (response.data.error) {
-                        vm.messageForm = response.data.error;
-                    }
-                    else {
-
-                    }
-                });
+                    });
+            }
         }
 
+        vm.viewResults = function () {
+
+            vm.showResults = true;
+            var i, j, k;
+            //   alert(vm.detailedForm.Questions[2].Question);
+
+            vm.chartResult = [];
+            //prelucrare pentru afisare statistica
+            for (i = 0; i < vm.results.Questions.length; i++) {
+
+                vm.chartResult[i] = [];
+                vm.chartResult[i].chartLabels = [];
+                vm.chartResult[i].chartData = [];
+
+                for (j = 0; j < vm.results.Questions[i].Answers.length; j++) {
+
+                    for (k = 0; k < vm.detailedForm.Questions[i].Answers.length; k++) {
+
+                        if (vm.detailedForm.Questions[i].Answers[k].AnswerID == vm.results.Questions[i].Answers[j].AnswerID) {
+                            //compar detailed form si id-ul din raspuns 
+
+                            vm.chartResult[i].chartLabels.push(vm.detailedForm.Questions[i].Answers[k].Answer);
+                        }
+                    }
+                    vm.chartResult[i].chartData.push(vm.results.Questions[i].Answers[j].AnswerNrVotes);
+
+                }
+
+            }
+        }
     }
 
 }());

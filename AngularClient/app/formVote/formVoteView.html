@@ -1,36 +1,50 @@
 ﻿<div ng-controller="FormVoteController as ctrl">
     <div class="panel panel-default">
-        <div class="panel-heading"><h3>{{ctrl.detailedForm.Title}}</h3></div>
+        <div class="panel-heading">
+            <h3>{{ctrl.detailedForm.Title}}</h3>
+            <h5 ng-if="ctrl.showResults">{{ctrl.results.Questions[0].QuestionNrVotes}} people have voted</h5>
+        </div>
         <div class="panel-body">
-            <h5 ng-if="ctrl.voted">{{ctrl.results.Questions[0].QuestionNrVotes}} people have voted</h5>
+            <div ng-if="ctrl.voted && !ctrl.showResults" class="alert alert-success" role="alert">{{ctrl.messageForm}}</div>
+
             <form class="form-horizontal">
                 <div data-ng-repeat="question in ctrl.detailedForm.Questions">
                     <div class="form-group">
-                        <label class="col-sm-offset-2 col-sm-10" for="pwd">{{question.Question}}</label>
+                        <label ng-if="ctrl.voted == ctrl.showResults" class="col-sm-offset-2 well col-sm-8" for="pwd">{{question.Question}}</label>
 
-                        <div ng-hide="ctrl.voted" class="col-sm-offset-3 col-sm-10" ng-repeat="answer in question.Answers">
+                        <div ng-hide="ctrl.voted" class="col-sm-offset-3 col-sm-8" ng-repeat="answer in question.Answers">
                             <input type="radio" name="{{ question.Answers }}" value="{{ answer.AnswerID }}" ng-model="ctrl.voteForm.answers[question.nrCrt].answer " required> {{ answer.Answer }}<br>
                         </div>
-                        <div ng-if="ctrl.voted" class="col-sm-offset-2 col-sm-4">
+                        <div ng-if="ctrl.showResults" class="col-sm-offset-2 col-sm-4">
                             <canvas id="doughnut" class="chart chart-doughnut" chart-legend="true" chart-data="ctrl.chartResult[question.nrCrt].chartData" chart-labels="ctrl.chartResult[question.nrCrt].chartLabels"></canvas>
                         </div>
-                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-8 col-sm-offset-2">
-                        <button type="submit" class="btn btn-default" ng-click="ctrl.vote()">Vote</button>
                     </div>
                 </div>
 
+                <div class="col-sm-4 col-sm-offset-4">
+                    <img ng-if="ctrl.voted && !ctrl.showResults" class="col-sm-9" src="images/success.jpg">
+                </div>
+          
+                      <div class="col-sm-8 col-sm-offset-2">
+                    <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                        <div ng-hide="ctrl.voted" class="btn-group" role="group">
+                            <button type="submit" class="btn btn-default" ng-click="ctrl.vote()">Vote</button>
+                        </div>
+                    </div>
+                </div>
             </form>
 
-            <div id="choicesDisplay">
-                {{ ctrl.voteForm }}
+            <div class="col-sm-8 col-sm-offset-2">
+                <div class="btn-group btn-group-justified" role="group" aria-label="...">
 
+                    <div ng-if="ctrl.voted" class="btn-group" role="group">
+                        <button class="btn btn-default" ng-click="ctrl.viewResults()">View results</button>
+                    </div>
+                    <div ng-if="ctrl.voted" class="btn-group" role="group">
+                        <button class="btn btn-default" ng-click="vm.changePage('home')">Return to home</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-   
-    {{ ctrl.detailedForm }}
-
 </div>

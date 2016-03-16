@@ -1,0 +1,31 @@
+﻿<div ng-controller="FormResultController as ctrl">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>{{ctrl.results.Title}}</h3>
+            <h5>{{ctrl.results.NrVotes}} people have voted</h5>
+        </div>
+        <div class="panel-body">
+              <form class="form-horizontal">
+                <div data-ng-repeat="question in ctrl.results.Questions">
+                    <div class="form-group">
+                        <label class="col-sm-offset-2 well col-sm-8" for="pwd">{{question.Question}}</label>
+
+                        <div class="col-sm-offset-2 col-sm-4">
+                            <canvas id="doughnut" class="chart chart-doughnut" chart-legend="true" chart-data="ctrl.chartResult[question.nrCrt].chartData" chart-labels="ctrl.chartResult[question.nrCrt].chartLabels"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+             </form>
+
+            <div class="col-sm-8 col-sm-offset-2">
+                <div class="btn-group btn-group-justified" role="group" aria-label="...">
+
+                    <div ng-if="ctrl.voted" class="btn-group" role="group">
+                        <button class="btn btn-default" ng-click="vm.changePage('home')">Return to home</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

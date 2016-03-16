@@ -7,6 +7,7 @@ namespace Entities
         public Form()
         {
             this.Questions = new List<Question>();
+            this.VotedForms = new List<VotedForms>();
         }
 
         public int FormID { get; set; }
@@ -19,5 +20,6 @@ namespace Entities
         public virtual Category Category { get; set; }
         public virtual User User { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
+        public virtual ICollection<VotedForms> VotedForms { get; set; }
     }
 }

@@ -50,10 +50,13 @@
     <Compile Include="UserDetailDTO.cs" />
     <Compile Include="UserDTO.cs" />
     <Compile Include="UserRegistrationDTO.cs" />
+    <Compile Include="VoteAnswerDetailResultDTO.cs" />
     <Compile Include="VoteAnswerResultDTO.cs" />
     <Compile Include="VoteDTO.cs" />
     <Compile Include="VoteListDTO.cs" />
+    <Compile Include="VoteQuestionResultDetailDTO.cs" />
     <Compile Include="VoteQuestionResultDTO.cs" />
+    <Compile Include="VoteResultDetailDTO.cs" />
     <Compile Include="VoteResultDTO.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

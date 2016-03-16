@@ -1,6 +1,5 @@
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.ModelConfiguration;
 using Entities;
+using System.Data.Entity.ModelConfiguration;
 
 namespace DataAccess.Mapping
 {

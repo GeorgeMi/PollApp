@@ -8,6 +8,7 @@ namespace Entities
         {
             this.Forms = new List<Form>();
             this.Tokens = new List<Token>();
+            this.VotedForms = new List<VotedForms>();
         }
 
         public int UserID { get; set; }
@@ -17,5 +18,6 @@ namespace Entities
         public string Role { get; set; }
         public virtual ICollection<Form> Forms { get; set; }
         public virtual ICollection<Token> Tokens { get; set; }
+        public virtual ICollection<VotedForms> VotedForms { get; set; }
     }
 }

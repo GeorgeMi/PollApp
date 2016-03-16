@@ -19,6 +19,7 @@ namespace DataAccess
         IQuestionRepository QuestionRepository { get; set; }
         IAnswerRepository AnswerRepository { get; set; }
         IFormRepository FormRepository { get; set; }
+        IVotedFormsRepository VotedFormsRepository { get; set; }
 
     }
 }
