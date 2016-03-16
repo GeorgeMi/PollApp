@@ -60,6 +60,19 @@ namespace WebAPI.Controllers
             list = formModel.GetVotedForms(id);
             return list;
         }
+
+        [RequireToken]
+        [HttpGet]
+        [ActionName("category")]
+        public IEnumerable<FormDTO> Category(int id) //returneaza lista sondajelor dintr-o categorie
+        {
+            List<FormDTO> list = new List<FormDTO>();
+            string token = Request.Headers.SingleOrDefault(x => x.Key == "token").Value.First();
+
+            list = formModel.GetCategoryForms(id, token);
+            return list;
+        }
+
         [RequireToken]
         public HttpResponseMessage Post([FromBody] FormDetailDTO formDTO)
         {

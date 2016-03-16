@@ -80,6 +80,43 @@ namespace BusinessLogic
             return voteResult;
         }
 
+        public List<FormDTO> GetCategoryForms(int categoryID, string token)
+        {
+            //returneaza toate formurile dintr-o categorie
+            List<Form> formList = _dataAccess.FormRepository.FindAllBy(f=>f.CategoryID == categoryID).ToList();
+            List<FormDTO> formDtoList = new List<FormDTO>();
+            FormDTO formDTO;
+
+            int userID = _dataAccess.TokenRepository.FindFirstBy(user => user.TokenString == token).UserID;
+
+            foreach (Form f in formList)
+            {
+                formDTO = new FormDTO();
+                formDTO.Title = f.Title;
+                formDTO.State = f.State;
+                formDTO.CreatedDate = f.CreatedDate.ToString();
+                formDTO.Deadline = f.Deadline.ToString();
+                formDTO.Category = _dataAccess.CategoryRepository.FindFirstBy(category => category.CategoryID == f.CategoryID).Name;
+                formDTO.Username = _dataAccess.UserRepository.FindFirstBy(user => user.UserID == f.UserID).Username;
+                formDTO.Id = f.FormID;
+                formDTO.Voted = true;
+
+                try
+                {
+                    userID = _dataAccess.VotedFormsRepository.FindFirstBy(voted => voted.FormID == f.FormID && voted.UserID == userID).UserID;
+                }
+                catch
+                {
+                    //daca userul a votat sondajul deja, nu il va mai putea vota
+                    formDTO.Voted = false;
+                }
+
+                formDtoList.Add(formDTO);
+            }
+
+            return formDtoList;
+        }
+
         public List<FormDTO> GetVotedForms(string username)
         {
             //returneaza toate formurile votate de catre un user

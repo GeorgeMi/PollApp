@@ -36,7 +36,8 @@
             manage_polls: false,
             manage_categories: false,
             vote_poll: false,
-            voted_polls: false
+            voted_polls: false,
+            category_forms: false
         };
 
         vm.confirm_password = '';
@@ -165,6 +166,7 @@
             vm.pages.manage_categories = false;
             vm.pages.vote_poll = false;
             vm.pages.voted_polls = false;
+            vm.pages.category_forms = false;
 
         }
 
@@ -172,6 +174,7 @@
         vm.changePage = function (mypage) {
             vm.pages.home = false;
             vm.pages.categories = false;
+            vm.pages.category_forms = false;
             vm.pages.my_polls = false;
             vm.pages.my_poll_result = false;
             vm.pages.new_poll = false;
@@ -180,6 +183,7 @@
             vm.pages.manage_categories = false;
             vm.pages.vote_poll = false;
             vm.pages.voted_polls = false;
+         
            
             if (mypage == 'home') {
                 vm.pages.home = true;
@@ -211,6 +215,10 @@
             else if (mypage == 'voted_polls') {
                 vm.pages.voted_polls = true;
             }
+            else if (mypage == 'category_forms') {
+                vm.pages.category_forms = true;
+            }
+           
             
         }
 

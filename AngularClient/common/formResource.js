@@ -53,6 +53,22 @@
                              }
                          }
                      }),
+            //forms from category
+            getCategoryForms: $resource(appSettings.serverPath + "/api/form/category/:category_id", { category_id: '@id' },
+                     {
+                         'getCategoryForms': {
+                             method: 'GET',
+                             isArray: true,
+                             headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'token': $cookies.get('token') },
+                             transformRequest: function (data, headersGetter) {
+                                 var str = [];
+                                 for (var d in data) {
+                                     str.push(encodeURIComponent(d) + "=" + encodeURIComponent(data[d]));
+                                 }
+                                 return str.join("&");
+                             }
+                         }
+                     }),
             //add form
             add: $resource(appSettings.serverPath + "/api/form", null,
                {

@@ -110,6 +110,7 @@
                     <div ng-if="vm.isLoggedIn" class="col-lg-12">
                         <div ng-if="vm.pages.home" ng-include="'app/form/formListView.html'">home</div>
                         <div ng-if="vm.pages.categories" ng-include="'app/category/categoryUserListView.html'">categories</div>
+                        <div ng-if="vm.pages.category_forms" ng-include="'app/formCategory/formCategoryListView.html'">category_forms</div>
                         <div ng-if="vm.pages.my_polls" ng-include="'app/formUser/formListUsersFormsView.html'">my_polls</div>
                         <div ng-if="vm.pages.my_poll_result" ng-include="'app/formResult/formResultView.html'">my_poll_result</div>
                         <div ng-if="vm.pages.new_poll" ng-include="'app/form/formAddView.html'">new_poll</div>
@@ -150,6 +151,7 @@
     <script src="app/formUser/formUserController.js"></script>
     <script src="app/formResult/formResultController.js"></script>
     <script src="app/formVoted/formVotedController.js"></script>
+    <script src="app/formCategory/formCategoryController.js"></script>
 </body>
 
 </html>

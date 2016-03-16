@@ -7,6 +7,7 @@
     function FormController(formResource, $cookies) {
         var vm = this;
 
+        vm.created = false;
         //data form to send
         vm.sendForm = {
             username: $cookies.get('username'),
@@ -112,6 +113,8 @@
                     vm.sendForm.deadline = '';
                     vm.sendForm.questions = [{ id: 1, question: '', answers: [{ id: 1, answer: '' }] }];
                     vm.messageForm = 'Poll created successfully';
+
+                    vm.created = true;
                 },
 
                //nu s-a creat

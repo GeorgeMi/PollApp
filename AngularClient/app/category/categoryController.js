@@ -51,5 +51,11 @@
                     });
             }
         }
+
+        vm.viewCategoryForms = function (id) {
+            //alert("cookie");
+            $cookies.put('category_id', id);
+            return 'category_forms';
+        }
     }
 }());
