@@ -188,6 +188,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\PublishProfiles\voteme - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\votemypoll - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\VoteMyPollWebApi - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
