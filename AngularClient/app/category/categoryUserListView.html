@@ -1,0 +1,22 @@
+﻿<div ng-controller="CategoryController as ctrl">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Search category</div>
+        <div class="panel-body">
+            <label class="control-label col-sm-2">Search:</label>
+            <div class="col-sm-8">
+                <input type="text" ng-model="searchText" class="form-control" placeholder="Search">
+            </div>
+
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">All categories</div>
+        <div class="panel-body">
+            <div class="list-group" ng-repeat="category in ctrl.categories  | filter:searchText">
+                <a ng-click="vm.changePage(ctrl.viewCategoryForms(category.CategoryID))" class="list-group-item list-group-item-success">{{ category.Name }}</a>
+            </div>
+        </div>
+    </div>
+</div>
